@@ -123,29 +123,74 @@
 <script>
 /* ---------------- GAME DATA ---------------- */
 
-const levels = [
-  {
-    name: "📍 Atlanta",
-    bgImage: 'atlanta.jpg',
-    items: ["plastic bottle", "banana peel", "cardboard box"]
-  },
-  {
-    name: "📍 Athens",
-    bgImage: 'athens.jpg',
-    items: ["plastic bottle", "banana peel", "old phone"]
-  },
-  {
-    name: "📍 Savannah",
-    bgImage: 'savannah.jpg',
-    items: ["banana peel", "cardboard box", "plastic bottle"]
-  }
-];
+        const LEVELS = [
+            {
+                name: 'Atlanta',
+                locationName: 'Atlanta',
+                bgImage: 'atlanta.jpg',
+                itemsNeeded: 5,
+                items: [
+                    { emoji: '🥤', name: 'Plastic Bottle', category: 'recycle' },
+                    { emoji: '📰', name: 'Newspaper', category: 'recycle' },
+                    { emoji: '🍌', name: 'Banana Peel', category: 'compost' },
+                    { emoji: '📱', name: 'Old Phone', category: 'recycle' },
+                    { emoji: '📦', name: 'Cardboard Box', category: 'recycle' }
+                ]
+            },
+            {
+                name: 'Savannah',
+                locationName: 'Savannah',
+                bgImage: 'savannah.jpg',
+                itemsNeeded: 6,
+                items: [
+                    { emoji: '🥫', name: 'Aluminum Can', category: 'recycle' },
+                    { emoji: '🍃', name: 'Leaves', category: 'compost' },
+                    { emoji: '🐚', name: 'Seaweed', category: 'compost' },
+                    { emoji: '🪮', name: 'Old Comb', category: 'recycle' },
+                    { emoji: '🥕', name: 'Carrot Scraps', category: 'compost' },
+                    { emoji: '🛢️', name: 'Oil Can', category: 'recycle' }
+                ]
+            },
+            {
+                name: 'Athens',
+                locationName: 'Athens',
+                bgImage: 'athens.jpg',
+                itemsNeeded: 7,
+                items: [
+                    { emoji: '🍎', name: 'Apple Core', category: 'compost' },
+                    { emoji: '🥪', name: 'Sandwich Wrapper', category: 'recycle' },
+                    { emoji: '☕', name: 'Coffee Cup', category: 'recycle' },
+                    { emoji: '🧀', name: 'Cheese Rind', category: 'compost' },
+                    { emoji: '📝', name: 'Notebook', category: 'recycle' },
+                    { emoji: '🍕', name: 'Pizza Box', category: 'recycle' },
+                    { emoji: '🥛', name: 'Milk Carton', category: 'recycle' }
+                ]
+            },
+            {
+                name: 'Augusta',
+                locationName: 'Augusta',
+                bgImage: 'augusta.jpg',
+                itemsNeeded: 8,
+                items: [
+                    { emoji: '🌿', name: 'Plant Clippings', category: 'compost' },
+                    { emoji: '🥚', name: 'Eggshells', category: 'compost' },
+                    { emoji: '🍂', name: 'Fall Leaves', category: 'compost' },
+                    { emoji: '🧹', name: 'Straw Broom', category: 'compost' },
+                    { emoji: '🪵', name: 'Wood Scraps', category: 'recycle' },
+                    { emoji: '🌾', name: 'Hay Bale', category: 'compost' },
+                    { emoji: '🔧', name: 'Rusty Nail', category: 'recycle' },
+                    { emoji: '🍯', name: 'Honey Jar', category: 'recycle' }
+                ]
+            }
+        ];
+
 
 const itemInfo = {
   "plastic bottle": { emoji: "🍼", best: "recycle" },
   "banana peel": { emoji: "🍌", best: "compost" },
   "cardboard box": { emoji: "📦", best: "recycle" },
-  "old phone": { emoji: "📱", best: "recycle" }
+  "old phone": { emoji: "📱", best: "recycle" },
+  "newspaper": {emoji: "📰", best: "recycle" },
 };
 
 let currentLevel = 0;
