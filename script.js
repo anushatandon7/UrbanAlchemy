@@ -91,7 +91,8 @@ function renderItems() {
     const div = document.createElement("div");
     div.className = "item";
     div.draggable = true;
-    div.dataset.item = item.name; // use your LEVELS structure
+    div.dataset.itemName = item.name;
+    div.dataset.category = item.category;
     div.innerText = `${item.emoji} ${item.name}`;
 
     // Randomly position inside container
@@ -100,6 +101,7 @@ function renderItems() {
     div.style.left = x + "px";
     div.style.top = y + "px";
 
+    // Drag logic
     div.addEventListener("dragstart", () => draggedItem = item);
 
     container.appendChild(div);
