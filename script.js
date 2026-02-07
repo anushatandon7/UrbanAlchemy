@@ -51,4 +51,3 @@ function nextItemOrLevel() {
     wizard.textContent = "🧙‍♂️ You have restored balance to Georgia! 🌍";
   }
 }
-
