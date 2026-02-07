@@ -84,6 +84,7 @@ function renderItems() {
   const container = document.getElementById("itemsContainer");
   container.innerHTML = "";
 
+  // Get container dimensions
   const containerWidth = container.clientWidth;
   const containerHeight = container.clientHeight;
 
@@ -95,14 +96,17 @@ function renderItems() {
     div.dataset.category = item.category;
     div.innerText = `${item.emoji} ${item.name}`;
 
-    // Randomly position inside container
-    const x = Math.random() * (containerWidth - 150); // 150 = item width
-    const y = Math.random() * (containerHeight - 50); // 50 = approx item height
+    // Randomly scatter inside container
+    const x = Math.random() * (containerWidth - 150); // item width = 150px
+    const y = Math.random() * (containerHeight - 50); // item height ~50px
+    div.style.position = "absolute";
     div.style.left = x + "px";
     div.style.top = y + "px";
 
     // Drag logic
-    div.addEventListener("dragstart", () => draggedItem = item);
+    div.addEventListener("dragstart", () => {
+      draggedItem = item;
+    });
 
     container.appendChild(div);
   });
