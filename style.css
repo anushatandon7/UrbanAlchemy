@@ -66,11 +66,9 @@ body {
     background-repeat: no-repeat;
 }
 .items {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin: 20px 0;
+  position: relative; /* container for absolute positioning */
+  width: 100%;
+  height: 60vh;       /* give a space for items to float */
 }
 .items, .cauldrons {
   display: flex;
@@ -81,14 +79,16 @@ body {
 }
 
 .item {
-  background: rgba(255,255,255,0.7); /* slightly transparent */
+  position: absolute;  /* allows random placement */
+  background: rgba(255,255,255,0.7);
   border: 2px solid #64b5f6;
   padding: 12px;
   border-radius: 10px;
   cursor: grab;
-  width: 150px;
-  text-align: center;
+  width: 120px;
   font-size: 18px;
+  text-align: center;
+  user-select: none;
 }
 .scene {
   background: rgba(255,255,255,0.0); /* fully transparent */
