@@ -68,26 +68,32 @@ document.body.style.backgroundRepeat = 'no-repeat';
 function renderItems() {
   const container = document.getElementById("itemsContainer");
   container.innerHTML = "";
-  // Get container dimensions
-  const containerWidth = container.clientWidth;
-  const containerHeight = container.clientHeight;
+
+  const containerWidth = container.offsetWidth;
+  const containerHeight = container.offsetHeight;
+
+  const itemWidth = 150;
+  const itemHeight = 60;
+  const padding = 20;
+
   remainingItems.forEach(item => {
     const div = document.createElement("div");
     div.className = "item";
     div.draggable = true;
-    div.dataset.itemName = item.name;
-    div.dataset.category = item.category;
-    div.innerText = ${item.emoji} ${item.name};
-    // Randomly scatter inside container
-    const x = Math.random() * (containerWidth - 150); // item width = 150px
-    const y = Math.random() * (containerHeight - 50); // item height ~50px
-    div.style.position = "absolute";
-    div.style.left = x + "px";
-    div.style.top = y + "px";
-    // Drag logic
-    div.addEventListener("dragstart", () => {
-      draggedItem = item;
-    });
+    div.innerText = `${item.emoji} ${item.name}`;
+
+    // SAFE random bounds
+    const maxX = containerWidth - itemWidth - padding;
+    const maxY = containerHeight - itemHeight - padding;
+
+    const x = Math.random() * Math.max(0, maxX);
+    const y = Math.random() * Math.max(0, maxY);
+
+    div.style.left = `${x}px`;
+    div.style.top = `${y}px`;
+
+    div.addEventListener("dragstart", () => draggedItem = item);
+
     container.appendChild(div);
   });
 }
