@@ -44,5 +44,20 @@ body {
     background-position: center;
     background-repeat: no-repeat;
 }
+.items {
+  position: relative; /* make container relative for absolute positioning of items */
+  height: 300px;      /* adjust height so items stay inside */
+}
+
+.item {
+  position: absolute;  /* allows random placement */
+  background: #e3f2fd;
+  border: 2px solid #64b5f6;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: grab;
+  width: 120px;
+  text-align: center;
+}
 
 
