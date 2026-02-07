@@ -4,35 +4,13 @@ const gameState = {
   score: 0,
   currentItem: "plastic bottle"
 };
-
 const item = document.getElementById("item");
 const wizard = document.getElementById("wizard");
 const scoreDisplay = document.getElementById("score");
 const locationDisplay = document.getElementById("location");
-
 item.addEventListener("dragstart", e => {
   e.dataTransfer.setData("text/plain", gameState.currentItem);
 });
-const containerWidth = container.clientWidth;
-   const containerHeight = container.clientHeight;
-   
-   // Calculate safe boundaries (avoid items going off-screen)
-   const maxX = Math.max(0, containerWidth - itemWidth - 20);
-   const maxY = Math.max(0, containerHeight - itemHeight - 20);
-   
-   // Random position within bounds
-   const x = Math.random() * maxX;
-   const y = Math.random() * maxY;
-   
-   div.style.left = x + "px";
-   div.style.top = y + "px"; 
- overlapping = placedItems.some(placed => {
-     return !(x + itemWidth + padding < placed.x ||
-              x > placed.x + placed.width + padding ||
-              y + itemHeight + padding < placed.y ||
-              y > placed.y + placed.height + padding);
-   });
-
 document.querySelectorAll(".cauldron").forEach(cauldron => {
   cauldron.addEventListener("dragover", e => e.preventDefault());
   cauldron.addEventListener("drop", e => {
@@ -40,12 +18,10 @@ document.querySelectorAll(".cauldron").forEach(cauldron => {
     evaluateChoice(gameState.currentItem, choice);
   });
 });
-
 function evaluateChoice(item, choice) {
   // Mock AI logic (replace with OpenAI call later)
   let points = 0;
   let message = "";
-
   if (item === "plastic bottle" && choice === "recycle") {
     points = 20;
     message = "Excellent transmutation! Recycling plastic reduces urban waste ✨";
@@ -53,14 +29,11 @@ function evaluateChoice(item, choice) {
     points = 5;
     message = "Not ideal, but every effort has some magic 🪄";
   }
-
   gameState.score += points;
-  scoreDisplay.textContent = `Sustainability Power: ${gameState.score}`;
-  wizard.textContent = `🧙‍♂️ Wizard: ${message} (+${points})`;
-
+  scoreDisplay.textContent = Sustainability Power: ${gameState.score};
+  wizard.textContent = 🧙‍♂️ Wizard: ${message} (+${points});
   nextItemOrLevel();
 }
-
 function nextItemOrLevel() {
   gameState.levelIndex++;
   if (gameState.levelIndex < gameState.levels.length) {
@@ -73,60 +46,48 @@ function nextItemOrLevel() {
 function startGame() {
   // Hide home screen
   document.getElementById("homeScreen").style.display = "none";
-
   // Show game screen
   document.getElementById("gameScreen").style.display = "block";
-
   // Initialize any game elements if needed
   document.getElementById("levelTitle").textContent = "Level 1: Enchanted City Cleanup";
   document.getElementById("score").textContent = "✨ Sustainability Power: 0";
 }
-
 function loadLevel() {
   const level = LEVELS[currentLevel];
   document.getElementById("levelTitle").innerText = level.name;
   document.getElementById("score").innerText =
     "✨ Sustainability Power: " + score;
-
   // Full screen background
-  document.body.style.backgroundImage = `url('images/${level.bgImage}')`;
+  document.body.style.backgroundImage = url('images/${level.bgImage}');
 document.body.style.backgroundSize = 'cover';
 document.body.style.backgroundPosition = 'center';
 document.body.style.backgroundRepeat = 'no-repeat';
-
-
   remainingItems = shuffle([...level.items]);
   renderItems();
 }
-
 function renderItems() {
   const container = document.getElementById("itemsContainer");
   container.innerHTML = "";
-
   // Get container dimensions
   const containerWidth = container.clientWidth;
   const containerHeight = container.clientHeight;
-
   remainingItems.forEach(item => {
     const div = document.createElement("div");
     div.className = "item";
     div.draggable = true;
     div.dataset.itemName = item.name;
     div.dataset.category = item.category;
-    div.innerText = `${item.emoji} ${item.name}`;
-
+    div.innerText = ${item.emoji} ${item.name};
     // Randomly scatter inside container
     const x = Math.random() * (containerWidth - 150); // item width = 150px
     const y = Math.random() * (containerHeight - 50); // item height ~50px
     div.style.position = "absolute";
     div.style.left = x + "px";
     div.style.top = y + "px";
-
     // Drag logic
     div.addEventListener("dragstart", () => {
       draggedItem = item;
     });
-
     container.appendChild(div);
   });
 }
