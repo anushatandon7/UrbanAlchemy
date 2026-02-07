@@ -39,7 +39,15 @@ body {
   border: 2px solid #333;
   cursor: grab;
 }
-
+.cauldrons {
+  position: fixed;      /* fixed on screen */
+  bottom: 20px;         /* distance from bottom */
+  width: 100%;
+  display: flex;
+  justify-content: space-between; /* left & right corners */
+  padding: 0 50px;
+  pointer-events: none; /* let items be draggable over container */
+}
 .cauldron {
   background: rgba(255,255,255,0.7);
   border: 2px dashed #ab47bc;
@@ -66,9 +74,9 @@ body {
     background-repeat: no-repeat;
 }
 .items {
-  position: relative; /* container for absolute positioning */
+  position: relative; 
   width: 100%;
-  height: 60vh;       /* give a space for items to float */
+  height: 80vh; /* almost full screen */
 }
 .items, .cauldrons {
   display: flex;
