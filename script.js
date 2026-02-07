@@ -51,3 +51,14 @@ function nextItemOrLevel() {
     wizard.textContent = "🧙‍♂️ You have restored balance to Georgia! 🌍";
   }
 }
+function startGame() {
+  // Hide home screen
+  document.getElementById("homeScreen").style.display = "none";
+
+  // Show game screen
+  document.getElementById("gameScreen").style.display = "block";
+
+  // Initialize any game elements if needed
+  document.getElementById("levelTitle").textContent = "Level 1: Enchanted City Cleanup";
+  document.getElementById("score").textContent = "✨ Sustainability Power: 0";
+}
