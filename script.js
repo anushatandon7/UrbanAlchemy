@@ -64,20 +64,17 @@ function startGame() {
 }
 
 function loadLevel() {
-  const level = levels[currentLevel];
+  const level = LEVELS[currentLevel];
   document.getElementById("levelTitle").innerText = level.name;
-  document.getElementById("score").innerText = "✨ Sustainability Power: " + score;
+  document.getElementById("score").innerText =
+    "✨ Sustainability Power: " + score;
 
-  // Set body background instead of scene background
-  document.body.style.backgroundImage = `url('images/${level.bgImage}')`;
-  document.body.style.backgroundSize = 'contain';     // fits viewport without scrolling
-  document.body.style.backgroundPosition = 'center';
-  document.body.style.backgroundRepeat = 'no-repeat';
+  // Full screen background
+  document.body.style.backgroundImage = `url('${level.bgImage}')`;
 
   remainingItems = shuffle([...level.items]);
   renderItems();
 }
-
 
 function renderItems() {
   const container = document.getElementById("itemsContainer");
