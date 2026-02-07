@@ -88,16 +88,13 @@ body {
 
 
 .item {
-  position: relative;       /* absolute so we can set left/top */
-  background: rgba(255,255,255,0.7);
-  border: 2px solid #64b5f6;
+  position: absolute;
+  width: 150px;
   padding: 12px;
   border-radius: 10px;
   cursor: grab;
-  width: 150px;
-  text-align: center;
-  font-size: 18px;
-  
+  background: #e3f2fd;
+  border: 2px solid #64b5f6;
 }
 .scene {
   background: rgba(255, 255, 255, 0.0); /* fully transparent */
