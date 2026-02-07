@@ -69,25 +69,24 @@ function renderItems() {
   const container = document.getElementById("itemsContainer");
   container.innerHTML = "";
 
-  const containerWidth = container.offsetWidth;
-  const containerHeight = container.offsetHeight;
+  // FORCE visibility for debugging
+  container.style.position = "relative";
+  container.style.height = "500px";
+  container.style.display = "block";
 
-  const itemWidth = 150;
-  const itemHeight = 60;
-  const padding = 20;
+  const width = container.offsetWidth;
+  const height = container.offsetHeight;
+
+  console.log("Container size:", width, height);
 
   remainingItems.forEach(item => {
     const div = document.createElement("div");
     div.className = "item";
     div.draggable = true;
-    div.innerText = `${item.emoji} ${item.name}`;
+    div.textContent = `${item.emoji} ${item.name}`;
 
-    // SAFE random bounds
-    const maxX = containerWidth - itemWidth - padding;
-    const maxY = containerHeight - itemHeight - padding;
-
-    const x = Math.random() * Math.max(0, maxX);
-    const y = Math.random() * Math.max(0, maxY);
+    const x = Math.random() * (width - 160);
+    const y = Math.random() * (height - 70);
 
     div.style.left = `${x}px`;
     div.style.top = `${y}px`;
