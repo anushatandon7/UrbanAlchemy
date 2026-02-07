@@ -1,49 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Urban Alchemy: Georgia Edition</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>✨ Urban Alchemy - Clean Up Georgia ✨</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<!-- HOME SCREEN -->
-<div id="start-modal">
-  <div id="start-box">
-    <h1>🧙‍♀️ Urban Alchemy</h1>
-    <p>
-      You are a magical urban alchemist tasked with cleaning Georgia cities.
-      Sort waste into enchanted cauldrons to restore balance and earn
-      Sustainability Power.
-    </p>
-    <button onclick="startGame()">Begin Alchemy ✨</button>
-  </div>
-</div>
-
-<!-- TOP BAR -->
-<div id="top-bar">
-  <div>📍 Location: <span id="location"></span></div>
-  <div>✨ Sustainability Power: <span id="score">0</span></div>
-  <button onclick="goHome()">🏠 Home</button>
-</div>
-
-<!-- GAME AREA -->
-<div id="game-area">
-  <div id="itemsContainer"></div>
-
-  <div id="cauldrons">
-    <div class="cauldron" ondragover="allowDrop(event)" ondrop="dropItem('recycle')">
-      ♻️<br><span>Recycle Cauldron</span>
+<!-- Home Screen -->
+<div class="start-modal" id="startModal">
+    <div class="start-content">
+        <div class="start-title">✨ Urban Alchemy ✨</div>
+        <div class="start-subtitle">Clean Up Georgia, Restore Magic</div>
+        <div class="start-description">
+            Help a mystical Wizard clean up Georgia's cities! Travel across 4 beautiful locations, sort waste into magical cauldrons, and learn about sustainability while earning points.
+        </div>
+        <div class="start-rules">
+            <ul>
+                <li>🎯 <strong>Drag items</strong> into the magical cauldrons</li>
+                <li>♻️ <strong>Recycling Cauldron</strong> - plastic, metal, paper, glass</li>
+                <li>🌱 <strong>Compost Cauldron</strong> - food waste & organic materials</li>
+                <li>✨ <strong>Get AI feedback</strong> from the Wizard after each sort</li>
+                <li>🏆 <strong>Earn points</strong> and level up to new Georgia cities</li>
+            </ul>
+        </div>
+        <button class="btn-primary" id="startGameBtn">Begin the Alchemy ✨</button>
     </div>
-    <div class="cauldron" ondragover="allowDrop(event)" ondrop="dropItem('compost')">
-      🌱<br><span>Compost Cauldron</span>
-    </div>
-  </div>
 </div>
 
-<!-- WIZARD POPUP -->
-<div id="wizard"></div>
+<!-- Header -->
+<div class="header">
+    <div class="title">✨ Urban Alchemy</div>
+    <div class="location-info">
+        <div class="location-name" id="locationName">Atlanta</div>
+        <div class="level-badge">Level <span id="levelNum">1</span> of 4</div>
+    </div>
+    <div class="score-display" id="scoreDisplay">Score: 0</div>
+    <button class="btn-secondary" id="homeBtn">🏠 Home</button>
+</div>
 
-<script src="game.js"></script>
+<!-- Game Area -->
+<div class="game-area">
+    <div class="location-bg" id="locationBg"></div>
+    <div class="gameplay-container">
+        <div class="items-container" id="itemsContainer"></div>
+        <div class="cauldrons-container">
+            <div class="cauldron recycle" id="cauldronRecycle">
+                <div class="cauldron-visual">🪄</div>
+                <div class="cauldron-label">♻️ Recycle</div>
+                <div class="cauldron-count"><span id="recycleCount">0</span> items</div>
+            </div>
+            <div class="cauldron compost" id="cauldronCompost">
+                <div class="cauldron-visual">🪄</div>
+                <div class="cauldron-label">🌱 Compost</div>
+                <div class="cauldron-count"><span id="compostCount">0</span> items</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Wizard Dialog -->
+<div class="wizard-dialog" id="wizardDialog" style="display: none;">
+    <div class="wizard-header">
+        <div class="wizard-icon">🧙</div>
+        <div class="wizard-name">Wizard</div>
+    </div>
+    <div class="wizard-message" id="wizardMessage"></div>
+    <div class="feedback-points" id="feedbackPoints"></div>
+</div>
+
+<!-- Level Complete Modal -->
+<div class="modal-overlay" id="levelCompleteModal">
+    <div class="modal">
+        <div class="modal-title">🎉 Level Complete!</div>
+        <div class="modal-content" id="modalContent"></div>
+        <div class="modal-buttons">
+            <button class="btn-primary" id="nextLevelBtn">Next Location →</button>
+            <button class="btn-secondary" id="playAgainBtn">Play Again</button>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
