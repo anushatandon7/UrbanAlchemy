@@ -1,531 +1,210 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urban Alchemy - Clean Up Georgia</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --primary: #2d5016; --secondary: #6b4c9a; --accent: #ff6b35;
-            --success: #06a77d; --gold: #ffd700; --dark-text: #1a1a1a;
-        }
-        body {
-            font-family: 'Fredoka', sans-serif;
-            background: linear-gradient(135deg, #1a472a 0%, #2d5016 50%, #4a3f5c 100%);
-            min-height: 100vh;
-            color: var(--dark-text);
-            overflow-x: hidden;
-        }
-        .header {
-            position: fixed; top: 20px; left: 20px; right: 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            z-index: 100; background: rgba(255, 255, 255, 0.95);
-            padding: 15px 25px; border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(10px);
-        }
-        .title {
-            font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .location-info { text-align: center; flex: 1; }
-        .location-name { font-size: 20px; font-weight: 700; color: var(--primary); }
-        .level-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--accent), #ff8a50);
-            color: white; padding: 4px 12px; border-radius: 20px;
-            font-size: 12px; font-weight: 600; margin-top: 4px;
-        }
-        .score-display {
-            background: linear-gradient(135deg, var(--gold), #ffed4e);
-            padding: 12px 24px; border-radius: 50px; font-weight: 700;
-            font-size: 18px; color: var(--dark-text);
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
-            min-width: 120px; text-align: center;
-        }
-        .game-area {
-            position: relative; min-height: 100vh; display: flex;
-            flex-direction: column; padding-top: 100px; padding-bottom: 60px;
-        }
-        .location-bg {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background-size: cover; background-position: center;
-            background-attachment: fixed; opacity: 0.4; z-index: -1;
-        }
-        .gameplay-container {
-            position: relative; z-index: 10; display: flex;
-            flex-direction: column; gap: 80px; padding: 0 40px;
-            margin: 0 auto; max-width: 1200px; width: 100%;
-        }
-        .items-container {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 25px; padding: 35px 40px; background: rgba(255, 255, 255, 0.93);
-            border-radius: 16px; backdrop-filter: blur(10px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-            border: 2px solid rgba(45, 80, 22, 0.15);
-        }
-        .item {
-            display: flex; align-items: center; justify-content: center;
-            padding: 20px; background: linear-gradient(135deg, #fff9e6, #fff0cc);
-            border: 2px solid var(--accent); border-radius: 12px;
-            cursor: grab; font-size: 50px; user-select: none;
-            transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(255, 107, 53, 0.15);
-            position: relative; aspect-ratio: 1;
-        }
-        .item:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(255, 107, 53, 0.3); }
-        .item.dragging { opacity: 0.6; cursor: grabbing; transform: scale(1.05); }
-        .item-label {
-            position: absolute; bottom: -32px; font-size: 11px; font-weight: 600;
-            white-space: nowrap; color: var(--dark-text); left: 50%;
-            transform: translateX(-50%);
-        }
-        .cauldrons-container {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 80px;
-            padding: 60px 80px; background: rgba(255, 255, 255, 0.93);
-            border-radius: 16px; backdrop-filter: blur(10px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-            border: 2px solid rgba(45, 80, 22, 0.15);
-        }
-        .cauldron {
-            display: flex; flex-direction: column; align-items: center;
-            justify-content: flex-start; gap: 25px; padding: 40px 30px;
-            cursor: pointer; transition: all 0.3s ease; position: relative;
-            min-height: 350px;
-        }
-        .cauldron-visual {
-            width: 160px; height: 160px; background-size: contain;
-            background-repeat: no-repeat; background-position: center;
-            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
-        }
-        .cauldron-label { font-size: 20px; font-weight: 700; color: var(--dark-text); }
-        .cauldron-count {
-            display: inline-block; background: linear-gradient(135deg, var(--gold), #ffed4e);
-            color: var(--dark-text); padding: 8px 16px; border-radius: 25px;
-            font-size: 14px; font-weight: 700; box-shadow: 0 3px 10px rgba(255, 215, 0, 0.3);
-        }
-        .cauldron:hover { transform: translateY(-10px); }
-        .cauldron.drag-over { transform: translateY(-15px) scale(1.02); box-shadow: 0 0 40px rgba(0, 0, 0, 0.3); }
-        .wizard-dialog {
-            position: fixed; bottom: 30px; right: 30px; max-width: 320px;
-            background: linear-gradient(135deg, #fff9e6, #ffeccc);
-            border: 3px solid var(--secondary); border-radius: 16px; padding: 25px;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25); z-index: 200;
-            animation: slideIn 0.4s ease-out;
-        }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(400px) translateY(40px); } to { opacity: 1; transform: translateX(0) translateY(0); } }
-        .wizard-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
-        .wizard-icon { font-size: 36px; }
-        .wizard-name { font-weight: 700; color: var(--secondary); font-size: 15px; }
-        .wizard-message { font-size: 15px; line-height: 1.7; color: var(--dark-text); margin-bottom: 15px; }
-        .feedback-points {
-            display: inline-block; background: linear-gradient(135deg, var(--gold), #ffed4e);
-            color: var(--dark-text); padding: 8px 14px; border-radius: 25px;
-            font-weight: 700; font-size: 14px;
-        }
-        .modal-overlay {
-            display: none; position: fixed; inset: 0;
-            background: rgba(0, 0, 0, 0.7); z-index: 500;
-            align-items: center; justify-content: center; animation: fadeIn 0.3s ease-out;
-        }
-        .modal-overlay.active { display: flex; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .modal {
-            background: linear-gradient(135deg, #fff9e6, #ffeccc);
-            border-radius: 24px; padding: 50px; max-width: 500px; text-align: center;
-            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
-            animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        @keyframes popIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
-        .modal-title {
-            font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            background-clip: text; margin-bottom: 20px;
-        }
-        .modal-content { font-size: 17px; line-height: 1.9; color: var(--dark-text); margin: 25px 0 35px; }
-        .modal-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
-        button {
-            padding: 14px 32px; border: none; border-radius: 12px; font-weight: 700;
-            font-size: 15px; cursor: pointer; transition: all 0.3s ease;
-            font-family: 'Fredoka', sans-serif;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), #3d6b1f);
-            color: white; box-shadow: 0 4px 15px rgba(45, 80, 22, 0.3);
-        }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(45, 80, 22, 0.4); }
-        .btn-secondary {
-            background: linear-gradient(135deg, var(--secondary), #7e5ba8);
-            color: white; box-shadow: 0 4px 15px rgba(107, 76, 154, 0.3);
-        }
-        .btn-secondary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(107, 76, 154, 0.4); }
-        .start-modal {
-            position: fixed; inset: 0;
-            background: linear-gradient(135deg, #1a472a 0%, #2d5016 50%, #4a3f5c 100%);
-            display: flex; align-items: center; justify-content: center; z-index: 600;
-            animation: fadeIn 0.5s ease-out;
-        }
-        .start-modal.hidden { display: none; }
-        .start-content { text-align: center; color: white; max-width: 650px; padding: 50px; }
-        .start-title {
-            font-family: 'Playfair Display', serif; font-size: 62px; font-weight: 700;
-            margin-bottom: 15px; background: linear-gradient(135deg, var(--gold), #ffed4e);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .start-subtitle { font-size: 26px; margin-bottom: 35px; color: #e0e0e0; font-weight: 600; }
-        .start-description { font-size: 17px; line-height: 1.9; margin-bottom: 40px; color: #d5d5d5; }
-        .start-rules {
-            text-align: left; background: rgba(255, 255, 255, 0.12);
-            padding: 30px; border-radius: 16px; margin-bottom: 40px;
-            backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.25);
-        }
-        .start-rules li { margin: 14px 0; list-style-position: inside; font-size: 16px; }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Urban Alchemy</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Fredoka',sans-serif;
+  background:#1a472a;
+  min-height:100vh;
+}
+.header{
+  position:fixed;top:20px;left:20px;right:20px;
+  display:flex;justify-content:space-between;align-items:center;
+  background:white;padding:15px 25px;border-radius:16px;
+  z-index:100;
+}
+.title{font-family:'Playfair Display';font-size:26px}
+.score{font-weight:700}
+.location-bg{
+  position:fixed;inset:0;
+  background-size:cover;background-position:center;
+  opacity:.4;z-index:-1;
+}
+.game{
+  padding-top:120px;
+  max-width:1100px;
+  margin:auto;
+}
+.items{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(90px,1fr));
+  gap:25px;
+  padding:40px 40px 80px;
+  background:rgba(255,255,255,.95);
+  border-radius:16px;
+}
+.item{
+  font-size:48px;
+  background:#fff3d6;
+  border:2px solid #ff6b35;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:grab;
+}
+.cauldrons{
+  margin-top:60px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:80px;
+  background:rgba(255,255,255,.95);
+  padding:60px;
+  border-radius:16px;
+}
+.cauldron{
+  text-align:center;
+  padding:40px;
+  border-radius:16px;
+  border:2px dashed #444;
+}
+.cauldron.drag-over{
+  background:#f0fff0;
+}
+.wizard{
+  position:fixed;
+  bottom:30px;right:30px;
+  background:#fff3d6;
+  padding:20px;
+  border-radius:16px;
+  display:none;
+  max-width:280px;
+}
+</style>
 </head>
+
 <body>
-    <div class="start-modal" id="startModal">
-        <div class="start-content">
-            <div class="start-title">✨ Urban Alchemy ✨</div>
-            <div class="start-subtitle">Clean Up Georgia, Restore Magic</div>
-            <div class="start-description">
-                Help a mystical Wizard clean up Georgia's cities! Travel across 4 beautiful locations, sort waste into magical cauldrons, and learn about sustainability while earning points.
-            </div>
-            <div class="start-rules">
-                <ul>
-                    <li>🎯 <strong>Drag items</strong> into the magical cauldrons</li>
-                    <li>♻️ <strong>Recycling Cauldron</strong> - plastic, metal, paper, glass</li>
-                    <li>🌱 <strong>Compost Cauldron</strong> - food waste & organic materials</li>
-                    <li>✨ <strong>Get AI feedback</strong> from the Wizard after each sort</li>
-                    <li>🏆 <strong>Earn points</strong> and level up to new Georgia cities</li>
-                </ul>
-            </div>
-            <button class="btn-primary" onclick="startGame()" style="padding: 16px 44px; font-size: 16px;">
-                Begin the Alchemy ✨
-            </button>
-        </div>
-    </div>
 
-    <div class="header">
-        <div class="title">✨ Urban Alchemy</div>
-        <div class="location-info">
-            <div class="location-name" id="locationName">Atlanta</div>
-            <div class="level-badge">Level <span id="levelNum">1</span> of 4</div>
-        </div>
-        <div class="score-display" id="scoreDisplay">Score: 0</div>
-    </div>
+<div class="header">
+  <div class="title">✨ Urban Alchemy</div>
+  <div id="locationName">Atlanta</div>
+  <div class="score" id="score">Score: 0</div>
+</div>
 
-    <div class="game-area">
-        <div class="location-bg" id="locationBg"></div>
-        
-        <div class="gameplay-container">
-            <div class="items-container" id="itemsContainer"></div>
-            <div class="cauldrons-container">
-                <div class="cauldron recycle" id="cauldronRecycle">
-                    <div class="cauldron-visual"></div>
-                    <div class="cauldron-label">♻️ Recycle</div>
-                    <div class="cauldron-count"><span id="recycleCount">0</span> items</div>
-                </div>
-                <div class="cauldron compost" id="cauldronCompost">
-                    <div class="cauldron-visual"></div>
-                    <div class="cauldron-label">🌱 Compost</div>
-                    <div class="cauldron-count"><span id="compostCount">0</span> items</div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="location-bg" id="bg"></div>
 
-    <div class="wizard-dialog" id="wizardDialog" style="display: none;">
-        <div class="wizard-header">
-            <div class="wizard-icon">🧙</div>
-            <div class="wizard-name">Wizard</div>
-        </div>
-        <div class="wizard-message" id="wizardMessage"></div>
-        <div class="feedback-points" id="feedbackPoints"></div>
-    </div>
+<div class="game">
+  <div class="items" id="items"></div>
 
-    <div class="modal-overlay" id="levelCompleteModal">
-        <div class="modal">
-            <div class="modal-title">🎉 Level Complete!</div>
-            <div class="modal-content" id="modalContent"></div>
-            <div class="modal-buttons">
-                <button class="btn-primary" id="nextLevelBtn">Next Location →</button>
-                <button class="btn-secondary" onclick="location.reload()">Play Again</button>
-            </div>
-        </div>
-    </div>
+  <div class="cauldrons">
+    <div class="cauldron" id="recycle">♻️ Recycle</div>
+    <div class="cauldron" id="compost">🌱 Compost</div>
+  </div>
+</div>
 
-    <script>
-        const LEVELS = [
-            {
-                name: 'Atlanta',
-                locationName: 'Atlanta',
-                bgColor: 'linear-gradient(135deg, #87CEEB 0%, #FFB6C1 100%)',
-                itemsNeeded: 5,
-                items: [
-                    { emoji: '🥤', name: 'Plastic Bottle', category: 'recycle' },
-                    { emoji: '📰', name: 'Newspaper', category: 'recycle' },
-                    { emoji: '🍌', name: 'Banana Peel', category: 'compost' },
-                    { emoji: '📱', name: 'Old Phone', category: 'recycle' },
-                    { emoji: '📦', name: 'Cardboard Box', category: 'recycle' }
-                ]
-            },
-            {
-                name: 'Savannah',
-                locationName: 'Savannah',
-                bgColor: 'linear-gradient(135deg, #FFE4B5 0%, #87CEEB 100%)',
-                itemsNeeded: 6,
-                items: [
-                    { emoji: '🥫', name: 'Aluminum Can', category: 'recycle' },
-                    { emoji: '🍃', name: 'Leaves', category: 'compost' },
-                    { emoji: '🐚', name: 'Seaweed', category: 'compost' },
-                    { emoji: '🪮', name: 'Old Comb', category: 'recycle' },
-                    { emoji: '🥕', name: 'Carrot Scraps', category: 'compost' },
-                    { emoji: '🛢️', name: 'Oil Can', category: 'recycle' }
-                ]
-            },
-            {
-                name: 'Athens',
-                locationName: 'Athens',
-                bgColor: 'linear-gradient(135deg, #DDA0DD 0%, #87CEEB 100%)',
-                itemsNeeded: 7,
-                items: [
-                    { emoji: '🍎', name: 'Apple Core', category: 'compost' },
-                    { emoji: '🥪', name: 'Sandwich Wrapper', category: 'recycle' },
-                    { emoji: '☕', name: 'Coffee Cup', category: 'recycle' },
-                    { emoji: '🧀', name: 'Cheese Rind', category: 'compost' },
-                    { emoji: '📝', name: 'Notebook', category: 'recycle' },
-                    { emoji: '🍕', name: 'Pizza Box', category: 'recycle' },
-                    { emoji: '🥛', name: 'Milk Carton', category: 'recycle' }
-                ]
-            },
-            {
-                name: 'Blue Ridge',
-                locationName: 'Blue Ridge Mountains',
-                bgColor: 'linear-gradient(135deg, #90EE90 0%, #87CEEB 100%)',
-                itemsNeeded: 8,
-                items: [
-                    { emoji: '🌿', name: 'Plant Clippings', category: 'compost' },
-                    { emoji: '🥚', name: 'Eggshells', category: 'compost' },
-                    { emoji: '🍂', name: 'Fall Leaves', category: 'compost' },
-                    { emoji: '🧹', name: 'Straw Broom', category: 'compost' },
-                    { emoji: '🪵', name: 'Wood Scraps', category: 'recycle' },
-                    { emoji: '🌾', name: 'Hay Bale', category: 'compost' },
-                    { emoji: '🔧', name: 'Rusty Nail', category: 'recycle' },
-                    { emoji: '🍯', name: 'Honey Jar', category: 'recycle' }
-                ]
-            }
-        ];
+<div class="wizard" id="wizard"></div>
 
-        const gameState = {
-            currentLevel: 0,
-            score: 0,
-            itemsProcessed: 0,
-            cauldronCounts: { recycle: 0, compost: 0 },
-            draggedItem: null,
-            apiKey: ''
-        };
+<script>
+const LEVELS = [
+  {
+    name:"Atlanta",
+    bg:"images/atlanta.jpg",
+    items:[
+      {e:"🥤",n:"Plastic Bottle",c:"recycle"},
+      {e:"📰",n:"Newspaper",c:"recycle"},
+      {e:"🍌",n:"Banana Peel",c:"compost"},
+      {e:"📦",n:"Cardboard Box",c:"recycle"},
+      {e:"🍎",n:"Apple Core",c:"compost"}
+    ]
+  },
+  {
+    name:"Savannah",
+    bg:"images/savannah.jpg",
+    items:[
+      {e:"🥫",n:"Aluminum Can",c:"recycle"},
+      {e:"🐚",n:"Seaweed",c:"compost"},
+      {e:"🍃",n:"Leaves",c:"compost"},
+      {e:"🧴",n:"Shampoo Bottle",c:"recycle"},
+      {e:"🥕",n:"Carrot Scraps",c:"compost"}
+    ]
+  },
+  {
+    name:"Athens",
+    bg:"images/athens.jpg",
+    items:[
+      {e:"☕",n:"Coffee Cup",c:"recycle"},
+      {e:"🍕",n:"Pizza Box",c:"recycle"},
+      {e:"🍎",n:"Apple Core",c:"compost"},
+      {e:"📝",n:"Notebook",c:"recycle"},
+      {e:"🥬",n:"Lettuce Scrap",c:"compost"}
+    ]
+  },
+  {
+    name:"Blue Ridge",
+    bg:"images/blueridge.jpg",
+    items:[
+      {e:"🌿",n:"Plant Clippings",c:"compost"},
+      {e:"🥚",n:"Eggshells",c:"compost"},
+      {e:"🍂",n:"Leaves",c:"compost"},
+      {e:"🔧",n:"Metal Scrap",c:"recycle"},
+      {e:"🍯",n:"Glass Jar",c:"recycle"}
+    ]
+  }
+];
 
-        function startGame() {
-            document.getElementById('startModal').classList.add('hidden');
-            loadLevel(0);
-        }
+let state = {
+  level:0,
+  score:0,
+  dragged:null
+};
 
-        function loadLevel(levelIndex) {
-            gameState.currentLevel = levelIndex;
-            gameState.itemsProcessed = 0;
-            gameState.cauldronCounts = { recycle: 0, compost: 0 };
+function loadLevel(){
+  const level = LEVELS[state.level];
+  document.getElementById("locationName").textContent = level.name;
+  document.getElementById("bg").style.backgroundImage = `url(${level.bg})`;
 
-            const level = LEVELS[levelIndex];
-            document.getElementById('locationName').textContent = level.name;
-            document.getElementById('levelNum').textContent = levelIndex + 1;
-            
-            const bgElement = document.getElementById('locationBg');
-            bgElement.style.background = level.bgColor;
+  const items = document.getElementById("items");
+  items.innerHTML = "";
+  level.items.forEach(item=>{
+    const el = document.createElement("div");
+    el.className="item";
+    el.textContent=item.e;
+    el.draggable=true;
+    el.dataset.correct=item.c;
+    el.addEventListener("dragstart",()=>state.dragged=item);
+    items.appendChild(el);
+  });
+}
 
-            generateItems(level);
-            updateUI();
-        }
+["recycle","compost"].forEach(type=>{
+  const el=document.getElementById(type);
+  el.addEventListener("dragover",e=>{e.preventDefault();el.classList.add("drag-over")});
+  el.addEventListener("dragleave",()=>el.classList.remove("drag-over"));
+  el.addEventListener("drop",e=>{
+    e.preventDefault();el.classList.remove("drag-over");
+    if(!state.dragged) return;
 
-        function generateItems(level) {
-            const container = document.getElementById('itemsContainer');
-            container.innerHTML = '';
+    const correct = state.dragged.c === type;
+    state.score += correct ? 20 : 5;
+    document.getElementById("score").textContent = `Score: ${state.score}`;
+    showWizard(correct, state.dragged.n);
 
-            level.items.forEach((item, idx) => {
-                const itemEl = document.createElement('div');
-                itemEl.className = 'item';
-                itemEl.draggable = true;
-                itemEl.innerHTML = `${item.emoji}`;
-                itemEl.dataset.category = item.category;
-                itemEl.dataset.name = item.name;
-                itemEl.dataset.id = idx;
-                itemEl.title = item.name;
+    // level up every 300 points
+    const newLevel = Math.floor(state.score / 300);
+    if(newLevel > state.level && newLevel < LEVELS.length){
+      state.level = newLevel;
+      setTimeout(loadLevel,1500);
+    }
+  });
+});
 
-                itemEl.addEventListener('dragstart', handleDragStart);
-                itemEl.addEventListener('dragend', handleDragEnd);
+function showWizard(correct,item){
+  const wiz=document.getElementById("wizard");
+  wiz.textContent = correct
+    ? `✨ Great choice! ${item} was transmuted correctly.`
+    : `🌟 Almost! Try a different cauldron for ${item}.`;
+  wiz.style.display="block";
+  setTimeout(()=>wiz.style.display="none",2500);
+}
 
-                container.appendChild(itemEl);
-            });
-        }
-
-        function handleDragStart(e) {
-            gameState.draggedItem = {
-                element: e.target,
-                category: e.target.dataset.category,
-                name: e.target.dataset.name,
-                id: e.target.dataset.id
-            };
-            e.target.classList.add('dragging');
-            e.dataTransfer.effectAllowed = 'move';
-        }
-
-        function handleDragEnd(e) {
-            e.target.classList.remove('dragging');
-        }
-
-        ['recycle', 'compost'].forEach(type => {
-            const cauldron = document.getElementById(`cauldron${type.charAt(0).toUpperCase() + type.slice(1)}`);
-            
-            cauldron.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                cauldron.classList.add('drag-over');
-                e.dataTransfer.dropEffect = 'move';
-            });
-
-            cauldron.addEventListener('dragleave', () => {
-                cauldron.classList.remove('drag-over');
-            });
-
-            cauldron.addEventListener('drop', (e) => {
-                e.preventDefault();
-                cauldron.classList.remove('drag-over');
-                
-                if (gameState.draggedItem) {
-                    handleDrop(type, gameState.draggedItem);
-                }
-            });
-        });
-
-        async function handleDrop(cauldronType, item) {
-            const isCorrect = item.category === cauldronType;
-            
-            const feedback = await getWizardFeedback(item.name, cauldronType, isCorrect);
-            
-            const points = isCorrect ? 20 : 5;
-            gameState.score += points;
-            gameState.itemsProcessed++;
-            gameState.cauldronCounts[cauldronType]++;
-
-            showWizardMessage(feedback, points, isCorrect);
-
-            item.element.remove();
-
-            if (gameState.itemsProcessed >= LEVELS[gameState.currentLevel].itemsNeeded) {
-                setTimeout(completeLevelSummary, 2000);
-            }
-
-            updateUI();
-        }
-
-        async function getWizardFeedback(itemName, cauldronType, isCorrect) {
-            try {
-                if (!gameState.apiKey) {
-                    return isCorrect 
-                        ? `Excellent work! The ${itemName} goes perfectly into the ${cauldronType} cauldron! ✨`
-                        : `Not quite right yet! Try placing the ${itemName} in the other cauldron. 🌟`;
-                }
-
-                const response = await fetch('https://api.anthropic.com/v1/messages', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-api-key': gameState.apiKey,
-                        'anthropic-version': '2023-06-01'
-                    },
-                    body: JSON.stringify({
-                        model: 'claude-sonnet-4-20250929',
-                        max_tokens: 120,
-                        messages: [{
-                            role: 'user',
-                            content: `You are a mystical Wizard. The player just sorted "${itemName}" into the "${cauldronType}" cauldron. This is ${isCorrect ? 'CORRECT' : 'INCORRECT'}. 
-
-Give a short (1 sentence), encouraging magical response. If correct, celebrate and add a fun sustainability fact. If incorrect, gently guide them. Keep it under 50 words. Be whimsical! Just the response, nothing else.`
-                        }]
-                    })
-                });
-
-                const data = await response.json();
-                return data.content[0].text || `Great effort with the ${itemName}!`;
-            } catch (error) {
-                return isCorrect 
-                    ? `Perfect! The ${itemName} goes into ${cauldronType}! ✨`
-                    : `Try the other cauldron for the ${itemName}! 🌟`;
-            }
-        }
-
-        function showWizardMessage(message, points, isCorrect) {
-            const dialog = document.getElementById('wizardDialog');
-            document.getElementById('wizardMessage').textContent = message;
-            document.getElementById('feedbackPoints').textContent = `+${points} points`;
-            dialog.style.display = 'block';
-
-            setTimeout(() => {
-                dialog.style.display = 'none';
-            }, 3500);
-        }
-
-        function updateUI() {
-            document.getElementById('scoreDisplay').textContent = `Score: ${gameState.score}`;
-            document.getElementById('recycleCount').textContent = gameState.cauldronCounts.recycle;
-            document.getElementById('compostCount').textContent = gameState.cauldronCounts.compost;
-        }
-
-        async function completeLevelSummary() {
-            const level = LEVELS[gameState.currentLevel];
-            const accuracy = Math.round((gameState.cauldronCounts.recycle + gameState.cauldronCounts.compost) / gameState.itemsProcessed * 100);
-
-            let content = `
-                <strong>Great work cleaning up ${level.name}!</strong><br><br>
-                Items sorted: ${gameState.itemsProcessed}<br>
-                Total Score: ${gameState.score} points<br>
-                Accuracy: ${accuracy}%
-            `;
-
-            if (gameState.currentLevel < LEVELS.length - 1) {
-                content += `<br><br>Ready to help restore the next Georgia city?`;
-            } else {
-                content += `<br><br>🎊 You've completed all levels! You're a true Urban Alchemist! 🎊`;
-            }
-
-            document.getElementById('modalContent').innerHTML = content;
-            
-            const modal = document.getElementById('levelCompleteModal');
-            modal.classList.add('active');
-
-            const nextBtn = document.getElementById('nextLevelBtn');
-            if (gameState.currentLevel < LEVELS.length - 1) {
-                nextBtn.style.display = 'block';
-                nextBtn.onclick = () => {
-                    modal.classList.remove('active');
-                    loadLevel(gameState.currentLevel + 1);
-                };
-            } else {
-                nextBtn.style.display = 'none';
-            }
-        }
-
-        window.addEventListener('load', () => {
-            const apiKey = prompt('🔑 Enter your Anthropic API Key (optional - for AI Wizard feedback):\n\nGet one free at: console.anthropic.com\n\n(Leave blank to play with basic feedback)');
-            if (apiKey && apiKey.trim()) {
-                gameState.apiKey = apiKey.trim();
-                console.log('API Key set for AI feedback');
-            }
-        });
-    </script>
+loadLevel();
+</script>
 </body>
 </html>
-
