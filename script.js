@@ -69,15 +69,11 @@ function renderItems() {
   const container = document.getElementById("itemsContainer");
   container.innerHTML = "";
 
-  // FORCE visibility for debugging
-  container.style.position = "relative";
-  container.style.height = "500px";
-  container.style.display = "block";
-
   const width = container.offsetWidth;
   const height = container.offsetHeight;
 
-  console.log("Container size:", width, height);
+  const itemWidth = 150;
+  const itemHeight = 60;
 
   remainingItems.forEach(item => {
     const div = document.createElement("div");
@@ -85,8 +81,8 @@ function renderItems() {
     div.draggable = true;
     div.textContent = `${item.emoji} ${item.name}`;
 
-    const x = Math.random() * (width - 160);
-    const y = Math.random() * (height - 70);
+    const x = Math.random() * (width - itemWidth);
+    const y = Math.random() * (height - itemHeight);
 
     div.style.left = `${x}px`;
     div.style.top = `${y}px`;
