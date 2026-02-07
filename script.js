@@ -1,55 +1,44 @@
-const gameState = {
-  levelIndex: 0,
-  levels: ["Atlanta", "Savannah", "Athens", "Blue Ridge"],
-  score: 0,
-  currentItem: "plastic bottle"
-};
+const express = require("express");
+const axios = require("axios");
+const cors = require("cors");
 
-const item = document.getElementById("item");
-const wizard = document.getElementById("wizard");
-const scoreDisplay = document.getElementById("score");
-const locationDisplay = document.getElementById("location");
+require("dotenv").config(); // store API key in .env
 
-item.addEventListener("dragstart", e => {
-  e.dataTransfer.setData("text/plain", gameState.currentItem);
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.post("/wizard", async (req, res) => {
+  const { item, choice, city } = req.body;
+
+  try {
+    const prompt = `You are a magical wizard teaching a player about sustainability.
+Item: ${item}
+Player's choice: ${choice} (either recycle or compost)
+City: ${city}
+Explain in a short, friendly, magical way if the choice is correct, why, and give a fun magical reaction.`;
+
+    const response = await axios.post(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: prompt }],
+        max_tokens: 100
+      },
+      {
+        headers: {
+          "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+    res.json({ text: response.data.choices[0].message.content });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to generate wizard response" });
+  }
 });
 
-document.querySelectorAll(".cauldron").forEach(cauldron => {
-  cauldron.addEventListener("dragover", e => e.preventDefault());
-  cauldron.addEventListener("drop", e => {
-    const choice = cauldron.id;
-    evaluateChoice(gameState.currentItem, choice);
-  });
-});
-
-function evaluateChoice(item, choice) {
-  // Mock AI logic (replace with OpenAI call later)
-  let points = 0;
-  let message = "";
-
-  if (item === "plastic bottle" && choice === "recycle") {
-    points = 20;
-    message = "Excellent transmutation! Recycling plastic reduces urban waste ✨";
-  } else {
-    points = 5;
-    message = "Not ideal, but every effort has some magic 🪄";
-  }
-
-  gameState.score += points;
-  scoreDisplay.textContent = `Sustainability Power: ${gameState.score}`;
-  wizard.textContent = `🧙‍♂️ Wizard: ${message} (+${points})`;
-
-  nextItemOrLevel();
-}
-
-function nextItemOrLevel() {
-  gameState.levelIndex++;
-  if (gameState.levelIndex < gameState.levels.length) {
-    locationDisplay.textContent = gameState.levels[gameState.levelIndex];
-    wizard.textContent += " New location unlocked!";
-  } else {
-    wizard.textContent = "🧙‍♂️ You have restored balance to Georgia! 🌍";
-  }
-}
-
+app.listen(3000, () => console.log("Wizard AI server running on port 3000"));
 
