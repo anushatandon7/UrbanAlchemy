@@ -64,19 +64,20 @@ function startGame() {
 }
 
 function loadLevel() {
-  const level = levels[currentLevel]; // use your levels array
+  const level = levels[currentLevel];
   document.getElementById("levelTitle").innerText = level.name;
   document.getElementById("score").innerText = "✨ Sustainability Power: " + score;
 
-  // Set the full-screen background image on the body
+  // Set body background instead of scene background
   document.body.style.backgroundImage = `url('images/${level.bgImage}')`;
-  document.body.style.backgroundSize = 'cover';
+  document.body.style.backgroundSize = 'contain';     // fits viewport without scrolling
   document.body.style.backgroundPosition = 'center';
   document.body.style.backgroundRepeat = 'no-repeat';
 
   remainingItems = shuffle([...level.items]);
   renderItems();
 }
+
 
 function renderItems() {
   const container = document.getElementById("itemsContainer");
