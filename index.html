@@ -34,6 +34,9 @@
     border-radius: 12px;
     max-width: 700px;
     margin: 20px auto;
+    min-height: 400px;
+    background-size: cover;
+    background-position: center;
   }
 
   .items, .cauldrons {
@@ -99,7 +102,7 @@
 
   <p id="score">✨ Sustainability Power: 0</p>
 
-  <div class="scene">
+  <div class="scene" id="scene">
     <h3>🧺 Items to Sort</h3>
     <div class="items" id="itemsContainer"></div>
 
@@ -123,75 +126,44 @@
 <script>
 /* ---------------- GAME DATA ---------------- */
 
-        const LEVELS = [
-            {
-                name: 'Atlanta',
-                locationName: 'Atlanta',
-                bgImage: 'atlanta.jpg',
-                itemsNeeded: 5,
-                items: [
-                    { emoji: '🥤', name: 'Plastic Bottle', category: 'recycle' },
-                    { emoji: '📰', name: 'Newspaper', category: 'recycle' },
-                    { emoji: '🍌', name: 'Banana Peel', category: 'compost' },
-                    { emoji: '📱', name: 'Old Phone', category: 'recycle' },
-                    { emoji: '📦', name: 'Cardboard Box', category: 'recycle' }
-                ]
-            },
-            {
-                name: 'Savannah',
-                locationName: 'Savannah',
-                bgImage: 'savannah.jpg',
-                itemsNeeded: 6,
-                items: [
-                    { emoji: '🥫', name: 'Aluminum Can', category: 'recycle' },
-                    { emoji: '🍃', name: 'Leaves', category: 'compost' },
-                    { emoji: '🐚', name: 'Seaweed', category: 'compost' },
-                    { emoji: '🪮', name: 'Old Comb', category: 'recycle' },
-                    { emoji: '🥕', name: 'Carrot Scraps', category: 'compost' },
-                    { emoji: '🛢️', name: 'Oil Can', category: 'recycle' }
-                ]
-            },
-            {
-                name: 'Athens',
-                locationName: 'Athens',
-                bgImage: 'athens.jpg',
-                itemsNeeded: 7,
-                items: [
-                    { emoji: '🍎', name: 'Apple Core', category: 'compost' },
-                    { emoji: '🥪', name: 'Sandwich Wrapper', category: 'recycle' },
-                    { emoji: '☕', name: 'Coffee Cup', category: 'recycle' },
-                    { emoji: '🧀', name: 'Cheese Rind', category: 'compost' },
-                    { emoji: '📝', name: 'Notebook', category: 'recycle' },
-                    { emoji: '🍕', name: 'Pizza Box', category: 'recycle' },
-                    { emoji: '🥛', name: 'Milk Carton', category: 'recycle' }
-                ]
-            },
-            {
-                name: 'Augusta',
-                locationName: 'Augusta',
-                bgImage: 'augusta.jpg',
-                itemsNeeded: 8,
-                items: [
-                    { emoji: '🌿', name: 'Plant Clippings', category: 'compost' },
-                    { emoji: '🥚', name: 'Eggshells', category: 'compost' },
-                    { emoji: '🍂', name: 'Fall Leaves', category: 'compost' },
-                    { emoji: '🧹', name: 'Straw Broom', category: 'compost' },
-                    { emoji: '🪵', name: 'Wood Scraps', category: 'recycle' },
-                    { emoji: '🌾', name: 'Hay Bale', category: 'compost' },
-                    { emoji: '🔧', name: 'Rusty Nail', category: 'recycle' },
-                    { emoji: '🍯', name: 'Honey Jar', category: 'recycle' }
-                ]
-            }
-        ];
-
-
-const itemInfo = {
-  "plastic bottle": { emoji: "🍼", best: "recycle" },
-  "banana peel": { emoji: "🍌", best: "compost" },
-  "cardboard box": { emoji: "📦", best: "recycle" },
-  "old phone": { emoji: "📱", best: "recycle" },
-  "newspaper": {emoji: "📰", best: "recycle" },
-};
+const levels = [
+    {
+        name: '📍 Atlanta',
+        bgImage: 'atlanta.jpg',
+        items: [
+            { emoji: '🥤', name: 'Plastic Bottle', category: 'recycle' },
+            { emoji: '📰', name: 'Newspaper', category: 'recycle' },
+            { emoji: '🍌', name: 'Banana Peel', category: 'compost' },
+            { emoji: '📱', name: 'Old Phone', category: 'recycle' },
+            { emoji: '📦', name: 'Cardboard Box', category: 'recycle' }
+        ]
+    },
+    {
+        name: '📍 Savannah',
+        bgImage: 'savannah.jpg',
+        items: [
+            { emoji: '🥫', name: 'Aluminum Can', category: 'recycle' },
+            { emoji: '🍃', name: 'Leaves', category: 'compost' },
+            { emoji: '🐚', name: 'Seaweed', category: 'compost' },
+            { emoji: '🪮', name: 'Old Comb', category: 'recycle' },
+            { emoji: '🥕', name: 'Carrot Scraps', category: 'compost' },
+            { emoji: '🛢️', name: 'Oil Can', category: 'recycle' }
+        ]
+    },
+    {
+        name: '📍 Athens',
+        bgImage: 'athens.jpg',
+        items: [
+            { emoji: '🍎', name: 'Apple Core', category: 'compost' },
+            { emoji: '🥪', name: 'Sandwich Wrapper', category: 'recycle' },
+            { emoji: '☕', name: 'Coffee Cup', category: 'recycle' },
+            { emoji: '🧀', name: 'Cheese Rind', category: 'compost' },
+            { emoji: '📝', name: 'Notebook', category: 'recycle' },
+            { emoji: '🍕', name: 'Pizza Box', category: 'recycle' },
+            { emoji: '🥛', name: 'Milk Carton', category: 'recycle' }
+        ]
+    }
+];
 
 let currentLevel = 0;
 let score = 0;
@@ -215,8 +187,11 @@ function resetGame() {
 function loadLevel() {
   const level = levels[currentLevel];
   document.getElementById("levelTitle").innerText = level.name;
-  document.getElementById("score").innerText =
-    "✨ Sustainability Power: " + score;
+  document.getElementById("score").innerText = "✨ Sustainability Power: " + score;
+
+  // Set background image
+  const scene = document.getElementById("scene");
+  scene.style.backgroundImage = `url('images/${level.bgImage}')`;
 
   remainingItems = shuffle([...level.items]);
   renderItems();
@@ -230,8 +205,9 @@ function renderItems() {
     const div = document.createElement("div");
     div.className = "item";
     div.draggable = true;
-    div.dataset.item = item;
-    div.innerText = `${itemInfo[item].emoji} ${item}`;
+    div.dataset.itemName = item.name;
+    div.dataset.category = item.category;
+    div.innerText = `${item.emoji} ${item.name}`;
     div.addEventListener("dragstart", () => draggedItem = item);
     container.appendChild(div);
   });
@@ -252,21 +228,19 @@ document.querySelectorAll(".cauldron").forEach(cauldron => {
 /* ---------------- AI WIZARD ---------------- */
 
 function judgeMove(item, choice) {
-  const correct = itemInfo[item].best === choice;
+  const correct = item.category === choice;
   let points = correct ? 20 : 5;
 
   score += points;
   remainingItems = remainingItems.filter(i => i !== item);
 
-  let message =
-    correct
-    ? `✨ Excellent transmutation!\n\nBy placing the ${item} into the ${choice} cauldron, you used sustainability magic correctly. This helps reduce waste, conserve resources, and protect Georgia’s ecosystems.\n\nYour wisdom grows stronger 🌍`
-    : `⚠️ A learning moment!\n\nThe ${item} would have been better suited for a different cauldron. Still, even imperfect magic teaches valuable lessons.\n\nTry again wisely next time!`;
+  const message = correct
+    ? `✨ Excellent transmutation!\n\nBy placing the ${item.name} into the ${choice} cauldron, you used sustainability magic correctly.`
+    : `⚠️ A learning moment!\n\nThe ${item.name} would have been better suited for a different cauldron.`;
 
   document.getElementById("wizardText").innerText = message;
   document.getElementById("wizardModal").style.display = "flex";
-  document.getElementById("score").innerText =
-    "✨ Sustainability Power: " + score;
+  document.getElementById("score").innerText = "✨ Sustainability Power: " + score;
 }
 
 function closeWizard() {
