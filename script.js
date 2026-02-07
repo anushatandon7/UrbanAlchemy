@@ -69,7 +69,7 @@ function loadLevel() {
   document.getElementById("score").innerText =
     "✨ Sustainability Power: " + score;
 
-  // Set background image for full screen
+  // Full screen background
   document.body.style.backgroundImage = `url('${level.bgImage}')`;
 
   remainingItems = shuffle([...level.items]);
