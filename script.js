@@ -69,11 +69,9 @@ function renderItems() {
   const container = document.getElementById("itemsContainer");
   container.innerHTML = "";
 
-  const width = container.offsetWidth;
-  const height = container.offsetHeight;
-
-  const itemWidth = 150;
-  const itemHeight = 60;
+  // IMPORTANT: container must be relative and have height
+  container.style.position = "relative";
+  container.style.height = "55vh";
 
   remainingItems.forEach(item => {
     const div = document.createElement("div");
@@ -81,14 +79,20 @@ function renderItems() {
     div.draggable = true;
     div.textContent = `${item.emoji} ${item.name}`;
 
-    const x = Math.random() * (width - itemWidth);
-    const y = Math.random() * (height - itemHeight);
+    // Add item to DOM FIRST so offsetWidth/Height work
+    container.appendChild(div);
 
-    div.style.left = `${x}px`;
-    div.style.top = `${y}px`;
+    // Random position AFTER append
+    const maxTop = container.offsetHeight - div.offsetHeight;
+    const maxLeft = container.offsetWidth - div.offsetWidth;
+
+    const randomTop = Math.random() * Math.max(0, maxTop);
+    const randomLeft = Math.random() * Math.max(0, maxLeft);
+
+    div.style.position = "absolute";
+    div.style.top = `${randomTop}px`;
+    div.style.left = `${randomLeft}px`;
 
     div.addEventListener("dragstart", () => draggedItem = item);
-
-    container.appendChild(div);
   });
 }
