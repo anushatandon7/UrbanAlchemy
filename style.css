@@ -90,4 +90,8 @@ body {
   text-align: center;
   font-size: 18px;
 }
+.scene {
+  background: rgba(255,255,255,0.0); /* fully transparent */
+}
+
 
