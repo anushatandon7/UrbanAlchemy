@@ -78,3 +78,28 @@ function loadLevel() {
   scene.style.backgroundSize = "cover";        // make it cover the scene
   scene.style.backgroundPosition = "center";   // center the image
 }
+function renderItems() {
+  const container = document.getElementById("itemsContainer");
+  container.innerHTML = "";
+
+  const containerWidth = container.offsetWidth;
+  const containerHeight = container.offsetHeight;
+
+  remainingItems.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "item";
+    div.draggable = true;
+    div.dataset.itemName = item.name;
+    div.dataset.category = item.category;
+    div.innerText = `${item.emoji}\n${item.name}`;
+
+    // Random position inside container
+    const x = Math.random() * (containerWidth - 120);  // 120 = item width
+    const y = Math.random() * (containerHeight - 50);  // 50 = approximate item height
+    div.style.left = x + "px";
+    div.style.top = y + "px";
+
+    div.addEventListener("dragstart", () => draggedItem = item);
+    container.appendChild(div);
+  });
+}
