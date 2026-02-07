@@ -72,6 +72,20 @@
     border-radius: 10px;
     cursor: grab;
     width: 150px;
+   const containerWidth = container.clientWidth;
+   const containerHeight = container.clientHeight;
+   
+   // Calculate safe boundaries (avoid items going off-screen)
+   const maxX = Math.max(0, containerWidth - itemWidth - 20);
+   const maxY = Math.max(0, containerHeight - itemHeight - 20);
+   
+   // Random position within bounds
+   const x = Math.random() * maxX;
+   const y = Math.random() * maxY;
+   
+   div.style.left = x + "px";
+   div.style.top = y + "px";
+
   }
 
   .cauldron {
@@ -101,7 +115,7 @@
   }
    
   .items-container {
-   /* semi-transparent so bg shows through */
+    position: relative
     border-radius: 15px;
     padding: 20px;
     display: flex;
