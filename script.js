@@ -83,23 +83,24 @@ function renderItems() {
   const container = document.getElementById("itemsContainer");
   container.innerHTML = "";
 
-  const containerWidth = container.offsetWidth;
-  const containerHeight = container.offsetHeight;
+  const containerWidth = container.clientWidth;
+  const containerHeight = container.clientHeight;
 
   remainingItems.forEach(item => {
     const div = document.createElement("div");
     div.className = "item";
     div.draggable = true;
-    div.dataset.item = item.name;
+    div.dataset.item = item.name; // use your LEVELS structure
     div.innerText = `${item.emoji} ${item.name}`;
 
-    // Random position
-    const x = Math.random() * (containerWidth - 120); // item width
-    const y = Math.random() * (containerHeight - 50); // item height
-    div.style.left = `${x}px`;
-    div.style.top = `${y}px`;
+    // Randomly position inside container
+    const x = Math.random() * (containerWidth - 150); // 150 = item width
+    const y = Math.random() * (containerHeight - 50); // 50 = approx item height
+    div.style.left = x + "px";
+    div.style.top = y + "px";
 
-    div.addEventListener("dragstart", () => draggedItem = item.name);
+    div.addEventListener("dragstart", () => draggedItem = item);
+
     container.appendChild(div);
   });
 }
