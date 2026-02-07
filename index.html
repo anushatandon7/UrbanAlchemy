@@ -42,16 +42,17 @@
  .scene {
   width: 100vw;
   height: 100vh;
-  padding: 20px 20px 80px 20px; /* extra bottom padding to prevent buttons from being cut off */
+  padding: 20px 20px 120px 20px; /* extra bottom space for buttons */
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* start from top so image aligns properly */
+  justify-content: flex-start;
   background-color: #c8f7c5; /* fallback green */
-  background-size: cover; /* fill entire screen */
-  background-position: center 20%; /* shift image slightly upward */
+  background-size: contain; /* keep full image visible */
+  background-position: center 30%; /* move image upward */
   background-repeat: no-repeat;
   border-radius: 0;
+  overflow: hidden;
 }
 
 
