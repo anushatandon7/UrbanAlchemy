@@ -29,14 +29,18 @@
   }
 
   .scene {
-    background: white;
+    background: rgba(255, 255, 255, 0.2); /* slightly see-through */
+    backdrop-filter: blur(5px); /* optional: nice blur effect behind items */
+    width: 100vw;
+    height: 100vh;
     padding: 20px;
-    border-radius: 12px;
-    max-width: 700px;
-    margin: 20px auto;
-    min-height: 400px;
-    background-size: cover;
-    background-position: center;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
   }
 
   .items, .cauldrons {
@@ -81,6 +85,17 @@
     max-width: 450px;
     text-align: left;
   }
+
+  .items-container {
+    background: rgba(255, 255, 255, 0.2); /* semi-transparent so bg shows through */
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
 </style>
 </head>
 
