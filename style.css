@@ -2,17 +2,28 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  height: 100vh;            /* full viewport height */
-  width: 100vw;             /* full viewport width */
-  overflow: hidden;         /* prevent scrollbars */
+  min-height: 100vh;
+  width: 100vw;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  background-size: cover;   /* make image cover whole screen */
+  background-size: cover;   /* cover entire viewport */
   background-position: center;
   background-repeat: no-repeat;
   text-align: center;
+  color: white;             /* text visible on background */
+}
+#topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  padding: 10px 20px;
+  background: rgba(0,0,0,0.5);  /* translucent overlay */
+  border-radius: 10px;
+  margin-top: 20px;
 }
 
 #game-area {
@@ -30,13 +41,12 @@ body {
 }
 
 .cauldron {
-  width: 150px;
-  height: 150px;
-  border: 3px dashed #555;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
+  background: rgba(255,255,255,0.7);
+  border: 2px dashed #ab47bc;
+  padding: 15px;
+  border-radius: 12px;
+  width: 170px;
+  font-size: 20px;
 }
 
 #wizard {
@@ -56,19 +66,28 @@ body {
     background-repeat: no-repeat;
 }
 .items {
-  position: relative; /* make container relative for absolute positioning of items */
-  height: 300px;      /* adjust height so items stay inside */
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+.items, .cauldrons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 20px 0;
 }
 
 .item {
-  position: absolute;  /* allows random placement */
-  background: #e3f2fd;
+  background: rgba(255,255,255,0.7); /* slightly transparent */
   border: 2px solid #64b5f6;
   padding: 12px;
   border-radius: 10px;
   cursor: grab;
-  width: 120px;
+  width: 150px;
   text-align: center;
+  font-size: 18px;
 }
-
 
