@@ -262,10 +262,10 @@ function renderItems() {
   const container = document.getElementById("itemsContainer");
   container.innerHTML = "";
 
-  // Ensure container has position relative
+  // Make sure container is positioned
   container.style.position = "relative";
 
-  // Track placed item positions to avoid overlap
+  // Track placed items to prevent overlap
   const placedItems = [];
 
   remainingItems.forEach((item, index) => {
@@ -276,32 +276,28 @@ function renderItems() {
     div.dataset.category = item.category;
     div.innerText = `${item.emoji} ${item.name}`;
 
-    // Add to DOM first
     container.appendChild(div);
 
-    // Then position randomly after a tiny delay to ensure container has dimensions
+    // Position randomly after DOM renders
     setTimeout(() => {
       const containerWidth = container.clientWidth;
       const containerHeight = container.clientHeight;
       
-      // Item dimensions
       const itemWidth = 150;
       const itemHeight = 60;
-      const padding = 15; // Space between items
+      const padding = 15;
       
-      // Calculate safe boundaries
       const maxX = Math.max(0, containerWidth - itemWidth - 20);
       const maxY = Math.max(0, containerHeight - itemHeight - 20);
       
       // Find non-overlapping position
-      let x, y, attempts = 0, maxAttempts = 100;
+      let x, y, attempts = 0;
       let overlapping = true;
       
-      while (overlapping && attempts < maxAttempts) {
+      while (overlapping && attempts < 100) {
         x = Math.random() * maxX;
         y = Math.random() * maxY;
         
-        // Check if this position overlaps with any placed item
         overlapping = placedItems.some(placed => {
           return !(x + itemWidth + padding < placed.x ||
                    x > placed.x + placed.width + padding ||
@@ -312,29 +308,15 @@ function renderItems() {
         attempts++;
       }
       
-      // If we couldn't find a spot after max attempts, place it anyway (fallback)
+      div.style.position = "absolute";
       div.style.left = x + "px";
       div.style.top = y + "px";
       
-      // Record this item's position
-      placedItems.push({
-        x: x,
-        y: y,
-        width: itemWidth,
-        height: itemHeight
-      });
+      placedItems.push({ x, y, width: itemWidth, height: itemHeight });
       
-    }, index * 50); // Stagger slightly for visual effect
+    }, index * 50);
 
-    // Drag event
-    div.addEventListener("dragstart", () => {
-      draggedItem = item;
-      div.style.opacity = "0.5";
-    });
-
-    div.addEventListener("dragend", () => {
-      div.style.opacity = "1";
-    });
+    div.addEventListener("dragstart", () => draggedItem = item);
   });
 }
 
