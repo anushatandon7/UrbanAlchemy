@@ -80,10 +80,10 @@ body {
     background-repeat: no-repeat;
 }
 .items {
-  position: relative;      /* parent must be relative for absolute children */
+  position: relative;
   width: 100%;
-  height: 80vh;            /* space for items to scatter vertically */
-  border: 1px solid transparent; /* optional for debugging */
+  height: 60vh;
+}
 }
 
 
