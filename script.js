@@ -64,19 +64,10 @@ function startGame() {
 }
 
 function loadLevel(levelIndex) {
-    gameState.currentLevel = levelIndex;
-    gameState.itemsProcessed = 0;
-    gameState.cauldronCounts = { recycle: 0, compost: 0 };
+   const bgElement = document.getElementById('locationBg');
+bgElement.style.backgroundImage = `url('images/${level.bgImage}')`; // make sure level.bgImage is the filename
+bgElement.style.backgroundSize = 'cover';
+bgElement.style.backgroundPosition = 'center';
+bgElement.style.backgroundRepeat = 'no-repeat';
 
-    const level = LEVELS[levelIndex];
-    document.getElementById('locationName').textContent = level.name;
-    document.getElementById('levelNum').textContent = levelIndex + 1;
-
-    const bgElement = document.getElementById('locationBg');
-    bgElement.style.backgroundImage = `url('${level.bgImage}')`;
-    bgElement.style.backgroundSize = 'cover';
-    bgElement.style.backgroundPosition = 'center';
-    
-    generateItems(level);
-    updateUI();
 }
