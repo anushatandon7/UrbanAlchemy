@@ -86,17 +86,16 @@ function renderItems() {
     const div = document.createElement("div");
     div.className = "item";
     div.draggable = true;
-    div.dataset.itemName = item.name;
-    div.dataset.category = item.category;
-    div.innerText = `${item.emoji}\n${item.name}`;
+    div.dataset.item = item.name;
+    div.innerText = `${item.emoji} ${item.name}`;
 
-    // Random position inside container
-    const x = Math.random() * (containerWidth - 120);  // 120 = item width
-    const y = Math.random() * (containerHeight - 50);  // 50 = approximate item height
-    div.style.left = x + "px";
-    div.style.top = y + "px";
+    // Random position
+    const x = Math.random() * (containerWidth - 120); // item width
+    const y = Math.random() * (containerHeight - 50); // item height
+    div.style.left = `${x}px`;
+    div.style.top = `${y}px`;
 
-    div.addEventListener("dragstart", () => draggedItem = item);
+    div.addEventListener("dragstart", () => draggedItem = item.name);
     container.appendChild(div);
   });
 }
