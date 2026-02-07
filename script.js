@@ -69,30 +69,21 @@ function renderItems() {
   const container = document.getElementById("itemsContainer");
   container.innerHTML = "";
 
-  // container MUST have size
-  container.style.position = "relative";
-  container.style.height = "55vh";
-
   remainingItems.forEach(item => {
     const div = document.createElement("div");
     div.className = "item";
-    div.draggable = true;
     div.textContent = `${item.emoji} ${item.name}`;
+    div.style.position = "absolute";
 
-    // Append FIRST
     container.appendChild(div);
 
-    // Then randomize
-    const maxTop = container.offsetHeight - div.offsetHeight;
-    const maxLeft = container.offsetWidth - div.offsetWidth;
+    // WAIT for browser to calculate size
+    requestAnimationFrame(() => {
+      const maxX = container.clientWidth - div.offsetWidth;
+      const maxY = container.clientHeight - div.offsetHeight;
 
-    const randomTop = Math.random() * Math.max(0, maxTop);
-    const randomLeft = Math.random() * Math.max(0, maxLeft);
-
-    div.style.position = "absolute";
-    div.style.top = `${randomTop}px`;
-    div.style.left = `${randomLeft}px`;
-
-    div.addEventListener("dragstart", () => draggedItem = item);
+      div.style.left = Math.random() * Math.max(0, maxX) + "px";
+      div.style.top = Math.random() * Math.max(0, maxY) + "px";
+    });
   });
 }
