@@ -70,6 +70,9 @@ function loadLevel() {
 
   // Set the full-screen background image on the body
   document.body.style.backgroundImage = `url('images/${level.bgImage}')`;
+  document.body.style.backgroundSize = 'cover';
+  document.body.style.backgroundPosition = 'center';
+  document.body.style.backgroundRepeat = 'no-repeat';
 
   remainingItems = shuffle([...level.items]);
   renderItems();
