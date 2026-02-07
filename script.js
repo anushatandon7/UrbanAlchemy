@@ -13,6 +13,25 @@ const locationDisplay = document.getElementById("location");
 item.addEventListener("dragstart", e => {
   e.dataTransfer.setData("text/plain", gameState.currentItem);
 });
+const containerWidth = container.clientWidth;
+   const containerHeight = container.clientHeight;
+   
+   // Calculate safe boundaries (avoid items going off-screen)
+   const maxX = Math.max(0, containerWidth - itemWidth - 20);
+   const maxY = Math.max(0, containerHeight - itemHeight - 20);
+   
+   // Random position within bounds
+   const x = Math.random() * maxX;
+   const y = Math.random() * maxY;
+   
+   div.style.left = x + "px";
+   div.style.top = y + "px"; 
+ overlapping = placedItems.some(placed => {
+     return !(x + itemWidth + padding < placed.x ||
+              x > placed.x + placed.width + padding ||
+              y + itemHeight + padding < placed.y ||
+              y > placed.y + placed.height + padding);
+   });
 
 document.querySelectorAll(".cauldron").forEach(cauldron => {
   cauldron.addEventListener("dragover", e => e.preventDefault());
