@@ -62,3 +62,21 @@ function startGame() {
   document.getElementById("levelTitle").textContent = "Level 1: Enchanted City Cleanup";
   document.getElementById("score").textContent = "✨ Sustainability Power: 0";
 }
+
+function loadLevel(levelIndex) {
+    gameState.currentLevel = levelIndex;
+    gameState.itemsProcessed = 0;
+    gameState.cauldronCounts = { recycle: 0, compost: 0 };
+
+    const level = LEVELS[levelIndex];
+    document.getElementById('locationName').textContent = level.name;
+    document.getElementById('levelNum').textContent = levelIndex + 1;
+
+    const bgElement = document.getElementById('locationBg');
+    bgElement.style.backgroundImage = `url('${level.bgImage}')`;
+    bgElement.style.backgroundSize = 'cover';
+    bgElement.style.backgroundPosition = 'center';
+    
+    generateItems(level);
+    updateUI();
+}
