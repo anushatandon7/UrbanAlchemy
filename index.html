@@ -1,252 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Urban Alchemy 🧪</title>
-
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(#e0f7fa, #ffffff);
-    text-align: center;
-    padding: 20px;
-  }
-
-  #topBar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  button {
-    padding: 10px 16px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    background: #4caf50;
-    color: white;
-    font-size: 14px;
-  }
-
-  .scene {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    max-width: 700px;
-    margin: 20px auto;
-  }
-
-  .items, .cauldrons {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin: 20px 0;
-  }
-
-  .item {
-    background: #e3f2fd;
-    border: 2px solid #64b5f6;
-    padding: 12px;
-    border-radius: 10px;
-    cursor: grab;
-    width: 150px;
-  }
-
-  .cauldron {
-    background: #f3e5f5;
-    border: 2px dashed #ab47bc;
-    padding: 15px;
-    border-radius: 12px;
-    width: 170px;
-  }
-
-  /* Wizard Modal */
-  .modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.4);
-    justify-content: center;
-    align-items: center;
-  }
-
-  .modal-content {
-    background: white;
-    padding: 25px;
-    border-radius: 14px;
-    max-width: 450px;
-    text-align: left;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Alchemy - Clean Up Georgia</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-<!-- HOME SCREEN -->
-<div id="homeScreen">
-  <h1>🧪 Urban Alchemy</h1>
-  <p>You are a wizard restoring Georgia cities through sustainability magic.</p>
-  <button onclick="startGame()">Start Game</button>
-</div>
-
-<!-- GAME SCREEN -->
-<div id="gameScreen" style="display:none;">
-  <div id="topBar">
-    <h2 id="levelTitle"></h2>
-    <button onclick="resetGame()">🏠 Home</button>
-  </div>
-
-  <p id="score">✨ Sustainability Power: 0</p>
-
-  <div class="scene">
-    <h3>🧺 Items to Sort</h3>
-    <div class="items" id="itemsContainer"></div>
-
-    <h3>🧪 Cauldrons</h3>
-    <div class="cauldrons">
-      <div class="cauldron" data-choice="recycle">♻️ Recycle</div>
-      <div class="cauldron" data-choice="compost">🌱 Compost</div>
+    <!-- Start Home Screen -->
+    <div class="start-modal" id="startModal">
+        <div class="start-content">
+            <div class="start-title">✨ Urban Alchemy ✨</div>
+            <div class="start-subtitle">Clean Up Georgia, Restore Magic</div>
+            <div class="start-description">
+                Help a mystical Wizard clean up Georgia's cities! Travel across 4 beautiful locations, sort waste into magical cauldrons, and learn about sustainability while earning points.
+            </div>
+            <div class="start-rules">
+                <ul>
+                    <li>🎯 <strong>Drag items</strong> into the magical cauldrons</li>
+                    <li>♻️ <strong>Recycling Cauldron</strong> - plastic, metal, paper, glass</li>
+                    <li>🌱 <strong>Compost Cauldron</strong> - food waste & organic materials</li>
+                    <li>✨ <strong>Get AI feedback</strong> from the Wizard after each sort</li>
+                    <li>🏆 <strong>Earn points</strong> and level up to new Georgia cities</li>
+                </ul>
+            </div>
+            <button class="btn-primary" onclick="startGame()">Begin the Alchemy ✨</button>
+        </div>
     </div>
-  </div>
-</div>
 
-<!-- WIZARD POPUP -->
-<div class="modal" id="wizardModal">
-  <div class="modal-content">
-    <h3>🧙‍♂️ Wizard of Sustainability</h3>
-    <p id="wizardText"></p>
-    <button onclick="closeWizard()">Continue</button>
-  </div>
-</div>
+    <!-- Header -->
+    <div class="header">
+        <div class="title">✨ Urban Alchemy</div>
+        <div class="location-info">
+            <div class="location-name" id="locationName">Atlanta</div>
+            <div class="level-badge">Level <span id="levelNum">1</span> of 4</div>
+        </div>
+        <div class="score-display" id="scoreDisplay">Score: 0</div>
+    </div>
 
-<script>
-/* ---------------- GAME DATA ---------------- */
+    <!-- Game Area -->
+    <div class="game-area">
+        <div class="location-bg" id="locationBg"></div>
 
-const levels = [
-  {
-    name: "📍 Atlanta",
-    bgImage: 'atlanta.jpg',
-    items: ["plastic bottle", "banana peel", "cardboard box"]
-  },
-  {
-    name: "📍 Athens",
-    bgImage: 'athens.jpg',
-    items: ["plastic bottle", "banana peel", "old phone"]
-  },
-  {
-    name: "📍 Savannah",
-    bgImage: 'savannah.jpg',
-    items: ["banana peel", "cardboard box", "plastic bottle"]
-  }
-];
+        <div class="gameplay-container">
+            <div class="items-container" id="itemsContainer"></div>
+            <div class="cauldrons-container">
+                <div class="cauldron recycle" id="cauldronRecycle">
+                    <div class="cauldron-visual"></div>
+                    <div class="cauldron-label">♻️ Recycle</div>
+                    <div class="cauldron-count"><span id="recycleCount">0</span> items</div>
+                </div>
+                <div class="cauldron compost" id="cauldronCompost">
+                    <div class="cauldron-visual"></div>
+                    <div class="cauldron-label">🌱 Compost</div>
+                    <div class="cauldron-count"><span id="compostCount">0</span> items</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-const itemInfo = {
-  "plastic bottle": { emoji: "🍼", best: "recycle" },
-  "banana peel": { emoji: "🍌", best: "compost" },
-  "cardboard box": { emoji: "📦", best: "recycle" },
-  "old phone": { emoji: "📱", best: "recycle" }
-};
+    <!-- Wizard Dialog -->
+    <div class="wizard-dialog" id="wizardDialog" style="display: none;">
+        <div class="wizard-header">
+            <div class="wizard-icon">🧙</div>
+            <div class="wizard-name">Wizard</div>
+        </div>
+        <div class="wizard-message" id="wizardMessage"></div>
+        <div class="feedback-points" id="feedbackPoints"></div>
+    </div>
 
-let currentLevel = 0;
-let score = 0;
-let remainingItems = [];
+    <!-- Level Complete Modal -->
+    <div class="modal-overlay" id="levelCompleteModal">
+        <div class="modal">
+            <div class="modal-title">🎉 Level Complete!</div>
+            <div class="modal-content" id="modalContent"></div>
+            <div class="modal-buttons">
+                <button class="btn-primary" id="nextLevelBtn">Next Location →</button>
+                <button class="btn-secondary" onclick="restartGame()">Play Again</button>
+            </div>
+        </div>
+    </div>
 
-/* ---------------- GAME FLOW ---------------- */
-
-function startGame() {
-  document.getElementById("homeScreen").style.display = "none";
-  document.getElementById("gameScreen").style.display = "block";
-  score = 0;
-  currentLevel = 0;
-  loadLevel();
-}
-
-function resetGame() {
-  document.getElementById("gameScreen").style.display = "none";
-  document.getElementById("homeScreen").style.display = "block";
-}
-
-function loadLevel() {
-  const level = levels[currentLevel];
-  document.getElementById("levelTitle").innerText = level.name;
-  document.getElementById("score").innerText =
-    "✨ Sustainability Power: " + score;
-
-  remainingItems = shuffle([...level.items]);
-  renderItems();
-}
-
-function renderItems() {
-  const container = document.getElementById("itemsContainer");
-  container.innerHTML = "";
-
-  remainingItems.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "item";
-    div.draggable = true;
-    div.dataset.item = item;
-    div.innerText = `${itemInfo[item].emoji} ${item}`;
-    div.addEventListener("dragstart", () => draggedItem = item);
-    container.appendChild(div);
-  });
-}
-
-/* ---------------- DRAG & DROP ---------------- */
-
-let draggedItem = null;
-
-document.querySelectorAll(".cauldron").forEach(cauldron => {
-  cauldron.addEventListener("dragover", e => e.preventDefault());
-  cauldron.addEventListener("drop", () => {
-    const choice = cauldron.dataset.choice;
-    judgeMove(draggedItem, choice);
-  });
-});
-
-/* ---------------- AI WIZARD ---------------- */
-
-function judgeMove(item, choice) {
-  const correct = itemInfo[item].best === choice;
-  let points = correct ? 20 : 5;
-
-  score += points;
-  remainingItems = remainingItems.filter(i => i !== item);
-
-  let message =
-    correct
-    ? `✨ Excellent transmutation!\n\nBy placing the ${item} into the ${choice} cauldron, you used sustainability magic correctly. This helps reduce waste, conserve resources, and protect Georgia’s ecosystems.\n\nYour wisdom grows stronger 🌍`
-    : `⚠️ A learning moment!\n\nThe ${item} would have been better suited for a different cauldron. Still, even imperfect magic teaches valuable lessons.\n\nTry again wisely next time!`;
-
-  document.getElementById("wizardText").innerText = message;
-  document.getElementById("wizardModal").style.display = "flex";
-  document.getElementById("score").innerText =
-    "✨ Sustainability Power: " + score;
-}
-
-function closeWizard() {
-  document.getElementById("wizardModal").style.display = "none";
-
-  if (remainingItems.length === 0) {
-    currentLevel++;
-    if (currentLevel < levels.length) {
-      loadLevel();
-    } else {
-      alert("🎉 You completed all levels! Sustainability Master!");
-      resetGame();
-    }
-  } else {
-    renderItems();
-  }
-}
-
-/* ---------------- UTILS ---------------- */
-
-function shuffle(array) {
-  return array.sort(() => Math.random() - 0.5);
-}
-</script>
-
+    <script src="script.js"></script>
 </body>
 </html>
-
