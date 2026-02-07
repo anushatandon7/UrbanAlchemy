@@ -6,34 +6,27 @@
 
 <style>
   body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    width: 100vw;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    text-align: center;
-    color: white;
-    transition: background-image 0.5s ease;
-  }
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  color: black;
+  background-color: #c8f7c5; /* light green fallback */
+}
+
+
 
   #topBar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 90%;
-    padding: 10px 20px;
-    background: rgba(0,0,0,0.6);
-    border-radius: 10px;
-    margin-top: 20px;
-    z-index: 100;
   }
 
   button {
@@ -44,120 +37,49 @@
     background: #4caf50;
     color: white;
     font-size: 14px;
-    transition: transform 0.2s;
   }
 
-  button:hover {
-    transform: scale(1.05);
+.scene {
+  width: 100vw;
+  height: 100vh;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #c8f7c5; /* fallback light green */
+  background-size: contain; /* image fits without overflowing */
+  background-position: center top; /* move image upward */
+  background-repeat: no-repeat;
+  border-radius: 0;
+}
+
+
   }
 
-  .scene {
-    background: rgba(255, 255, 255, 0.0);
-    border-radius: 12px;
-    max-width: 700px;
-    margin: 20px auto;
-    padding: 20px;
-    min-height: 400px;
-    width: 100%;
-  }
-
-  .items-container {
-    position: relative;
-    border-radius: 15px;
-    padding: 20px;
-    width: 90vw;
-    max-width: 1200px;
-    height: 50vh;
-    min-height: 400px;
-    margin: 20px auto;
-    background: rgba(255, 255, 255, 0.1);
-  }
-
-  .items {
-    position: relative;
-    width: 100%;
-    height: 80vh;
-    border: 1px solid transparent;
+  .items, .cauldrons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 20px 0;
   }
 
   .item {
-    position: absolute;
-    background: rgba(255,255,255,0.9);
+    background: #e3f2fd;
     border: 2px solid #64b5f6;
     padding: 12px;
     border-radius: 10px;
     cursor: grab;
     width: 150px;
-    text-align: center;
-    font-size: 18px;
-    transition: transform 0.2s, box-shadow 0.2s;
-    user-select: none;
-  }
-
-  .item:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  }
-
-  .item:active {
-    cursor: grabbing;
-  }
-
-  .cauldrons {
-    position: fixed;
-    bottom: 20px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    padding: 0 50px;
-    z-index: 50;
   }
 
   .cauldron {
-    background: rgba(255,255,255,0.9);
-    border: 3px dashed #ab47bc;
-    padding: 20px;
+    background: #f3e5f5;
+    border: 2px dashed #ab47bc;
+    padding: 15px;
     border-radius: 12px;
-    width: 200px;
-    font-size: 20px;
-    pointer-events: all;
-    transition: all 0.3s;
-  }
-
-  .cauldron:hover {
-    background: rgba(255,255,255,1);
-    transform: scale(1.05);
-    border-color: #8e24aa;
-  }
-
-  .cauldron.drag-over {
-    background: rgba(171, 71, 188, 0.3);
-    border-style: solid;
-    box-shadow: 0 0 20px rgba(171, 71, 188, 0.8);
-  }
-
-  /* HOME SCREEN */
-  #homeScreen {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    background: linear-gradient(135deg, #c8f7c5, #a8e6a3);
-    color: #000;
-  }
-
-  #homeScreen h1 {
-    font-size: 3em;
-    margin-bottom: 20px;
-  }
-
-  #homeScreen button {
-    font-size: 18px;
-    padding: 15px 40px;
+    width: 170px;
   }
 
   /* Wizard Modal */
@@ -165,29 +87,45 @@
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0,0,0,0.4);
     justify-content: center;
     align-items: center;
-    z-index: 1000;
   }
 
   .modal-content {
     background: white;
-    color: black;
-    padding: 30px;
+    padding: 25px;
     border-radius: 14px;
     max-width: 450px;
-    text-align: center;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    text-align: left;
   }
+   
+  .items-container {
+   /* semi-transparent so bg shows through */
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+  /* HOME SCREEN */
+#homeScreen {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: linear-gradient(135deg, #c8f7c5, #a8e6a3); /* light green gradient */
+  color: #000;
+}
 
-  #score {
-    background: rgba(0,0,0,0.6);
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-size: 18px;
-    font-weight: bold;
-  }
+/* SCENE BACKGROUNDS */
+
+
+
 </style>
 </head>
 
@@ -210,13 +148,14 @@
   <p id="score">✨ Sustainability Power: 0</p>
 
   <div class="scene" id="scene">
-    <h3 style="background: rgba(0,0,0,0.6); display: inline-block; padding: 10px 20px; border-radius: 8px;">🧺 Items to Sort</h3>
-    <div class="items-container" id="itemsContainer"></div>
-  </div>
+    <h3>🧺 Items to Sort</h3>
+    <div class="items" id="itemsContainer"></div>
 
-  <div class="cauldrons">
-    <div class="cauldron" data-choice="recycle">♻️ Recycle</div>
-    <div class="cauldron" data-choice="compost">🌱 Compost</div>
+    <h3>🧪 Cauldrons</h3>
+    <div class="cauldrons">
+      <div class="cauldron" data-choice="recycle">♻️ Recycle</div>
+      <div class="cauldron" data-choice="compost">🌱 Compost</div>
+    </div>
   </div>
 </div>
 
@@ -234,7 +173,7 @@
 const levels = [
   {
     name: '📍 Atlanta',
-    bgImage: 'https://images.unsplash.com/photo-1590948021564-22f0f7a21ff9?w=1200',
+    bgImage: 'atlanta.jpg',
     items: [
       { emoji: '🥤', name: 'Plastic Bottle', category: 'recycle' },
       { emoji: '📰', name: 'Newspaper', category: 'recycle' },
@@ -245,7 +184,7 @@ const levels = [
   },
   {
     name: '📍 Savannah',
-    bgImage: 'https://images.unsplash.com/photo-1567877119830-10d8d2b1f080?w=1200',
+    bgImage: 'savannah.jpg',
     items: [
       { emoji: '🥫', name: 'Aluminum Can', category: 'recycle' },
       { emoji: '🍃', name: 'Leaves', category: 'compost' },
@@ -257,7 +196,7 @@ const levels = [
   },
   {
     name: '📍 Athens',
-    bgImage: 'https://images.unsplash.com/photo-1555664424-778a1e5e1b48?w=1200',
+    bgImage: 'athens.jpg',
     items: [
       { emoji: '🍎', name: 'Apple Core', category: 'compost' },
       { emoji: '🥪', name: 'Sandwich Wrapper', category: 'recycle' },
@@ -287,7 +226,6 @@ function startGame() {
 function resetGame() {
   document.getElementById("gameScreen").style.display = "none";
   document.getElementById("homeScreen").style.display = "block";
-  document.body.style.backgroundImage = "";
 }
 
 /* ---------------- LOAD LEVEL ---------------- */
@@ -296,25 +234,20 @@ function loadLevel() {
   document.getElementById("levelTitle").innerText = level.name;
   document.getElementById("score").innerText = "✨ Sustainability Power: " + score;
 
-  // Set body background image
-  document.body.style.backgroundImage = `url('${level.bgImage}')`;
+  // Set scene background (only one image)
+  const scene = document.getElementById("scene");
+  scene.style.backgroundImage = `url('images/${level.bgImage}')`;
 
   remainingItems = shuffle([...level.items]);
   renderItems();
 }
 
-/* ---------------- RENDER ITEMS WITH RANDOM POSITIONING (NO OVERLAP) ---------------- */
+/* ---------------- RENDER ITEMS ---------------- */
 function renderItems() {
   const container = document.getElementById("itemsContainer");
   container.innerHTML = "";
 
-  // Ensure container has position relative
-  container.style.position = "relative";
-
-  // Track placed item positions to avoid overlap
-  const placedItems = [];
-
-  remainingItems.forEach((item, index) => {
+  remainingItems.forEach(item => {
     const div = document.createElement("div");
     div.className = "item";
     div.draggable = true;
@@ -322,88 +255,21 @@ function renderItems() {
     div.dataset.category = item.category;
     div.innerText = `${item.emoji} ${item.name}`;
 
-    // Add to DOM first
+    div.addEventListener("dragstart", () => draggedItem = item);
     container.appendChild(div);
-
-    // Then position randomly after a tiny delay to ensure container has dimensions
-    setTimeout(() => {
-      const containerWidth = container.clientWidth;
-      const containerHeight = container.clientHeight;
-      
-      // Item dimensions
-      const itemWidth = 150;
-      const itemHeight = 60;
-      const padding = 15; // Space between items
-      
-      // Calculate safe boundaries
-      const maxX = Math.max(0, containerWidth - itemWidth - 20);
-      const maxY = Math.max(0, containerHeight - itemHeight - 20);
-      
-      // Find non-overlapping position
-      let x, y, attempts = 0, maxAttempts = 100;
-      let overlapping = true;
-      
-      while (overlapping && attempts < maxAttempts) {
-        x = Math.random() * maxX;
-        y = Math.random() * maxY;
-        
-        // Check if this position overlaps with any placed item
-        overlapping = placedItems.some(placed => {
-          return !(x + itemWidth + padding < placed.x ||
-                   x > placed.x + placed.width + padding ||
-                   y + itemHeight + padding < placed.y ||
-                   y > placed.y + placed.height + padding);
-        });
-        
-        attempts++;
-      }
-      
-      // If we couldn't find a spot after max attempts, place it anyway (fallback)
-      div.style.left = x + "px";
-      div.style.top = y + "px";
-      
-      // Record this item's position
-      placedItems.push({
-        x: x,
-        y: y,
-        width: itemWidth,
-        height: itemHeight
-      });
-      
-    }, index * 50); // Stagger slightly for visual effect
-
-    // Drag event
-    div.addEventListener("dragstart", () => {
-      draggedItem = item;
-      div.style.opacity = "0.5";
-    });
-
-    div.addEventListener("dragend", () => {
-      div.style.opacity = "1";
-    });
   });
 }
 
 /* ---------------- DRAG & DROP ---------------- */
 document.querySelectorAll(".cauldron").forEach(cauldron => {
-  cauldron.addEventListener("dragover", e => {
-    e.preventDefault();
-    cauldron.classList.add("drag-over");
-  });
-
-  cauldron.addEventListener("dragleave", () => {
-    cauldron.classList.remove("drag-over");
-  });
-
-  cauldron.addEventListener("drop", (e) => {
-    e.preventDefault();
-    cauldron.classList.remove("drag-over");
+  cauldron.addEventListener("dragover", e => e.preventDefault());
+  cauldron.addEventListener("drop", () => {
     const choice = cauldron.dataset.choice;
     judgeMove(draggedItem, choice);
   });
 });
 
-/* ---------------- AI WIZARD FEEDBACK ---------------- */
+/* ---------------- AI WIZARD ---------------- */
 function judgeMove(item, choice) {
   if (!item) return;
 
@@ -414,8 +280,8 @@ function judgeMove(item, choice) {
   remainingItems = remainingItems.filter(i => i !== item);
 
   const message = correct
-    ? `✨ Excellent transmutation!\n\nBy placing the ${item.name} into the ${choice} cauldron, you used sustainability magic correctly. (+${points} points)`
-    : `⚠️ A learning moment!\n\nThe ${item.name} should go into the ${item.category} cauldron instead. But every effort counts! (+${points} points)`;
+    ? `✨ Excellent transmutation!\nBy placing the ${item.name} into the ${choice} cauldron, you used sustainability magic correctly.`
+    : `⚠️ A learning moment!\nThe ${item.name} would have been better suited for a different cauldron.`;
 
   document.getElementById("wizardText").innerText = message;
   document.getElementById("wizardModal").style.display = "flex";
@@ -428,9 +294,9 @@ function closeWizard() {
   if (remainingItems.length === 0) {
     currentLevel++;
     if (currentLevel < levels.length) {
-      setTimeout(() => loadLevel(), 300);
+      loadLevel();
     } else {
-      alert("🎉 You completed all levels! Final Score: " + score + "\nYou are a Sustainability Master!");
+      alert("🎉 You completed all levels! Sustainability Master!");
       resetGame();
     }
   } else {
