@@ -16,11 +16,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  background-size: cover;   /* cover entire viewport */
-  background-position: center;
-  background-repeat: no-repeat;
   text-align: center;
-  color: black;             /* text visible on background */
+  color: black;
+  background-color: #c8f7c5; /* light green fallback */
 }
 
 
@@ -42,18 +40,18 @@
   }
 
  .scene {
-    width: 100vw;
-    height: 100vh;
-    padding: 20px;
-    border-radius: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-size: contain; /* ensures image fits without overflowing */
-    background-position: center;
-    background-repeat: no-repeat;
-    border-radius: 0;
+  width: 100vw;
+  height: 100vh;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #c8f7c5; /* fallback light green */
+  background-size: contain; /* image fits without overflowing */
+  background-position: center top; /* move image upward */
+  background-repeat: no-repeat;
+  border-radius: 0;
 }
 
 
@@ -121,7 +119,7 @@
   align-items: center;
   text-align: center;
   background: linear-gradient(135deg, #c8f7c5, #a8e6a3); /* light green gradient */
-  color: #000; /* keep text visible */
+  color: #000; /* text color */
 }
 
 /* SCENE BACKGROUNDS */
