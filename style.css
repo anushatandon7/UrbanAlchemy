@@ -88,7 +88,7 @@ body {
 
 
 .item {
-  position: absolute;       /* absolute so we can set left/top */
+  position: relative;       /* absolute so we can set left/top */
   background: rgba(255,255,255,0.7);
   border: 2px solid #64b5f6;
   padding: 12px;
@@ -97,6 +97,7 @@ body {
   width: 150px;
   text-align: center;
   font-size: 18px;
+  
 }
 .scene {
   background: rgba(255, 255, 255, 0.0); /* fully transparent */
@@ -115,6 +116,7 @@ body {
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
+  
 }
 
 
