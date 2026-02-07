@@ -69,7 +69,7 @@ function renderItems() {
   const container = document.getElementById("itemsContainer");
   container.innerHTML = "";
 
-  // IMPORTANT: container must be relative and have height
+  // container MUST have size
   container.style.position = "relative";
   container.style.height = "55vh";
 
@@ -79,10 +79,10 @@ function renderItems() {
     div.draggable = true;
     div.textContent = `${item.emoji} ${item.name}`;
 
-    // Add item to DOM FIRST so offsetWidth/Height work
+    // Append FIRST
     container.appendChild(div);
 
-    // Random position AFTER append
+    // Then randomize
     const maxTop = container.offsetHeight - div.offsetHeight;
     const maxLeft = container.offsetWidth - div.offsetWidth;
 
