@@ -70,7 +70,11 @@ function loadLevel() {
     "✨ Sustainability Power: " + score;
 
   // Full screen background
-  document.body.style.backgroundImage = `url('${level.bgImage}')`;
+  document.body.style.backgroundImage = `url('images/${level.bgImage}')`;
+document.body.style.backgroundSize = 'cover';
+document.body.style.backgroundPosition = 'center';
+document.body.style.backgroundRepeat = 'no-repeat';
+
 
   remainingItems = shuffle([...level.items]);
   renderItems();
