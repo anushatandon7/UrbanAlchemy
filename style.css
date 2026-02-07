@@ -85,9 +85,11 @@ body {
   height: 55vh;     /* MUST be explicit */
   display: block;
 }
-
-
-
+#itemsContainer {
+  position: relative;
+  width: 100%;
+  height: 60vh;
+}
 .item {
   position: absolute;
   width: 150px;
